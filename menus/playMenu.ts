@@ -1,14 +1,13 @@
-const inquirer = require('inquirer')
-import { Player, locationInfo, hunt, profile, showInventory } from '../player'
-import { Area } from '../locations/area'
-import { City } from '../locations/city'
-import { mainMenu } from './mainMenu'
-import { goToMenu } from './goToMenu'
-import { shopMenu } from './shopMenu'
-import { homeMenu } from './homeMenu'
-import { cls } from '../helpers/utils'
-import { monsters } from '../monsters'
-
+const inquirer = require('inquirer');
+import { Player, locationInfo, hunt, profile, showInventory } from '../player';
+import { Area } from '../locations/area';
+import { City } from '../locations/city';
+import { mainMenu } from './mainMenu';
+import { goToMenu } from './goToMenu';
+import { shopMenu } from './shopMenu';
+import { homeMenu } from './homeMenu';
+import { cls } from '../helpers/utils';
+import { monsters } from '../monsters';
 
 export const playMenu = (player: Player) => {
   let _choices;
