@@ -26,7 +26,6 @@ exports.inventory = [
 exports.allItems = Object.values(item);
 exports.allEquipment = Object.values(sword);
 exports.armors = Object.values(armor);
-exports.allEquipment.push.apply(Object.values(exports.armors));
 exports.maxExp = 100;
 var changeMaxExp = function (n) {
     exports.maxExp *= n;
