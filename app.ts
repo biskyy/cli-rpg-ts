@@ -1,6 +1,6 @@
 import { Player, p1, setupStats } from './player';
-import { cls } from './utils';
-import { mainMenu, confirmMenu } from './menus';
+import { cls } from './helpers/utils';
+import { mainMenu } from './menus/mainMenu'
 
 const input = async (player: Player) => {
   let _input = await mainMenu(player);

@@ -37,13 +37,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var player_1 = require("./player");
-var utils_1 = require("./utils");
-var menus_1 = require("./menus");
+var utils_1 = require("./helpers/utils");
+var mainMenu_1 = require("./menus/mainMenu");
 var input = function (player) { return __awaiter(void 0, void 0, void 0, function () {
     var _input;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, menus_1.mainMenu(player)];
+            case 0: return [4 /*yield*/, mainMenu_1.mainMenu(player)];
             case 1:
                 _input = _a.sent();
                 return [2 /*return*/, _input];
