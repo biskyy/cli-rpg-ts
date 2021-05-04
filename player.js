@@ -1,7 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.locationInfo = exports.showInventory = exports.hunt = exports.setupStats = exports.battle = exports.profile = exports.sleep = exports.eat = exports.attack = exports.p1 = exports.changeMaxExp = exports.maxExp = exports.allItems = exports.inventory = exports.equipment = exports.coins = exports.eatValue = exports.playerHp = exports.playerMaxHp = void 0;
-var item = require("./items");
+exports.locationInfo = exports.showInventory = exports.hunt = exports.setupStats = exports.battle = exports.profile = exports.sleep = exports.eat = exports.attack = exports.p1 = exports.changeMaxExp = exports.maxExp = exports.armors = exports.allEquipment = exports.allItems = exports.inventory = exports.equipment = exports.coins = exports.eatValue = exports.playerHp = exports.playerMaxHp = void 0;
+var swords_1 = require("./items/swords");
+var armors_1 = require("./items/armors");
+var item = require("./items/items");
+var sword = require("./items/swords");
+var armor = require("./items/armors");
 var area_1 = require("./locations/area");
 var city_1 = require("./locations/city");
 var utils_1 = require("./helpers/utils");
@@ -11,8 +15,8 @@ exports.playerHp = exports.playerMaxHp;
 exports.eatValue = 10;
 exports.coins = 500;
 exports.equipment = {
-    sword: item.WoodenSword,
-    armor: item.ClothArmor,
+    sword: swords_1.WoodenSword,
+    armor: armors_1.ClothArmor,
 };
 exports.inventory = [
     item.testItem,
@@ -20,6 +24,9 @@ exports.inventory = [
     exports.equipment.armor,
 ];
 exports.allItems = Object.values(item);
+exports.allEquipment = Object.values(sword);
+exports.armors = Object.values(armor);
+exports.allEquipment.push.apply(Object.values(exports.armors));
 exports.maxExp = 100;
 var changeMaxExp = function (n) {
     exports.maxExp *= n;

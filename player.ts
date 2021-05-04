@@ -1,19 +1,24 @@
-import * as item from './items';
+import { Item } from './items/items';
+import { Sword, WoodenSword } from './items/swords';
+import { Armor, ClothArmor } from './items/armors';
+import * as item from './items/items';
+import * as sword from './items/swords';
+import * as armor from './items/armors';
 import { Area } from './locations/area';
 import { City } from './locations/city';
 import { Monster, monsters } from './monsters';
 import { cls, timeSleep, randomFromArr } from './helpers/utils';
-import { infoHuntLog, infoLog, infoLogEnd } from './helpers/logs'
+import { infoHuntLog, infoLog, infoLogEnd } from './helpers/logs';
 
-export type Inventory = item.Armor | item.Sword | item.Item;
+export type Inventory = Armor | Sword | Item;
 
 export const playerMaxHp: number = 100;
 export const playerHp: number = playerMaxHp;
 export const eatValue: number = 10;
 export const coins: number = 500;
 export const equipment = {
-  sword: item.WoodenSword,
-  armor: item.ClothArmor,
+  sword: WoodenSword,
+  armor: ClothArmor,
 };
 export const inventory: Inventory[] = [
   item.testItem,
@@ -21,6 +26,8 @@ export const inventory: Inventory[] = [
   equipment.armor,
 ];
 export const allItems: Inventory[] = Object.values(item);
+export let allEquipment: Inventory[] = Object.values(sword)
+export const armors = Object.values(armor)
 export let maxExp = 100;
 
 export const changeMaxExp = (n: number) => {
