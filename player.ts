@@ -2,16 +2,10 @@ import * as item from './items';
 import { Area } from './locations/area';
 import { City } from './locations/city';
 import { Monster, monsters } from './monsters';
-import {
-  cls,
-  infoHuntLog,
-  infoLog,
-  infoLogEnd,
-  timeSleep,
-  randomFromArr,
-} from './utils';
+import { cls, timeSleep, randomFromArr } from './helpers/utils';
+import { infoHuntLog, infoLog, infoLogEnd } from './helpers/logs'
 
-export type Inventory = (item.Armor | item.Sword | item.Item)
+export type Inventory = item.Armor | item.Sword | item.Item;
 
 export const playerMaxHp: number = 100;
 export const playerHp: number = playerMaxHp;
@@ -26,9 +20,7 @@ export const inventory: Inventory[] = [
   equipment.sword,
   equipment.armor,
 ];
-export const allItems: Inventory[] = Object.values(
-  item
-);
+export const allItems: Inventory[] = Object.values(item);
 export let maxExp = 100;
 
 export const changeMaxExp = (n: number) => {
@@ -234,9 +226,9 @@ export const locationInfo = (player: Player) => {
       infoLogEnd();
     case City.SHOP:
       infoLog();
-      console.log('You are currently in the shop from your city.')
-      console.log('From here you can either buy new items,')
-      console.log('or sell items from your inventory to get money')
+      console.log('You are currently in the shop from your city.');
+      console.log('From here you can either buy new items,');
+      console.log('or sell items from your inventory to get money');
       infoLogEnd();
       break;
   }
