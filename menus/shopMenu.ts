@@ -1,11 +1,12 @@
 const inquirer = require('inquirer')
-import { Player, locationInfo, allItems } from '../player'
+import { Player, locationInfo, allItems, Inventory } from '../player'
 import { playMenu } from './playMenu'
 import { confirmMenu } from './confirmMenu'
-import { cls, randomsFromArr } from '../helpers/utils'
+import { cls, randomItemsFromArr } from '../helpers/utils'
 import { Area } from '../locations/area'
 import { infoLog, infoLogEnd, infoShopLog } from '../helpers/logs'
-import * as item from '../items'
+import * as item from '../items/items'
+import { Item } from '../items/items'
 
 
 export const shopMenu = (player: Player) => {
@@ -40,10 +41,7 @@ export const shopMenu = (player: Player) => {
     });
 };
 
-const shopCatalog: (item.Item | item.Armor | item.Sword)[] = randomsFromArr(
-  allItems,
-  5
-);
+const shopCatalog: Inventory[] = randomItemsFromArr(allItems, 2)
 const _choices = shopCatalog.map((x) => x.name);
 _choices.push('Back');
 

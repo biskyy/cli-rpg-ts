@@ -76,7 +76,7 @@ var shopMenu = function (player) {
     });
 };
 exports.shopMenu = shopMenu;
-var shopCatalog = utils_1.randomsFromArr(player_1.allItems, 5);
+var shopCatalog = utils_1.randomItemsFromArr(player_1.allItems, 2);
 var _choices = shopCatalog.map(function (x) { return x.name; });
 _choices.push('Back');
 var shopBuyMenu = function (player) {
