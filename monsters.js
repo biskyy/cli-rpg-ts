@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.monsters = void 0;
-var bee = {
+const bee = {
     name: 'Bee',
     hp: 10,
     attack: 3,
@@ -9,7 +9,7 @@ var bee = {
     exp: Math.floor(Math.random() * 10) + 1,
     coins: Math.floor(Math.random() * 5) + 1,
 };
-var wolf = {
+const wolf = {
     name: 'Wolf',
     hp: 20,
     attack: 4,
@@ -17,7 +17,7 @@ var wolf = {
     exp: Math.floor(Math.random() * 20) + 10,
     coins: Math.floor(Math.random() * 15) + 5,
 };
-var deer = {
+const deer = {
     name: 'Deer',
     hp: 20,
     attack: 0,
