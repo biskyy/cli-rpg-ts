@@ -247,6 +247,13 @@ export const locationInfo = (player: Player) => {
       console.log('or sell items from your inventory to get money');
       infoLogEnd();
       break;
+    case City.BLACKSMITH:
+      infoLog();
+      console.log('You are in currently in the blacksmith from your city');
+      console.log('From here you can either buy new equipment,');
+      console.log('or sell equipment from your inventory for money.');
+      infoLogEnd();
+      break;
   }
 };
 
