@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.goToMenu = void 0;
-var inquirer = require('inquirer');
-var area_1 = require("../locations/area");
-var utils_1 = require("../helpers/utils");
-var logs_1 = require("../helpers/logs");
-var playMenu_1 = require("./playMenu");
-var goToMenu = function (player) {
-    var _choices = Object.values(area_1.Area);
-    var index = _choices.indexOf(player.location);
+const inquirer = require('inquirer');
+const area_1 = require("../locations/area");
+const utils_1 = require("../helpers/utils");
+const logs_1 = require("../helpers/logs");
+const playMenu_1 = require("./playMenu");
+const goToMenu = (player) => {
+    let _choices = Object.values(area_1.Area);
+    let index = _choices.indexOf(player.location);
     _choices.splice(index, 1);
     return inquirer
         .prompt([
@@ -19,7 +19,7 @@ var goToMenu = function (player) {
             choices: _choices,
         },
     ])
-        .then(function (answers) {
+        .then((answers) => {
         switch (answers.choice) {
             case area_1.Area.CITY:
                 player.location = area_1.Area.CITY;
