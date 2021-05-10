@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mainMenu = void 0;
-var inquirer = require('inquirer');
-var player_1 = require("../player");
-var utils_1 = require("../helpers/utils");
-var playMenu_1 = require("./playMenu");
-var mainMenu = function (player) {
+const inquirer = require('inquirer');
+const player_1 = require("../player");
+const utils_1 = require("../helpers/utils");
+const playMenu_1 = require("./playMenu");
+const mainMenu = (player) => {
     return inquirer
         .prompt([
         {
@@ -15,7 +15,7 @@ var mainMenu = function (player) {
             choices: ['Play', 'Profile', 'Exit'],
         },
     ])
-        .then(function (answers) {
+        .then((answers) => {
         switch (answers.choice) {
             case 'Play':
                 utils_1.cls();
