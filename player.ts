@@ -7,7 +7,7 @@ import * as armor from './items/armors';
 import { Area } from './locations/area';
 import { City } from './locations/city';
 import { Monster, monsters } from './monsters';
-import { cls, timeSleep, randomFromArr } from './helpers/utils';
+import { cls, timeSleep, randomFromArr, throwErr } from './helpers/utils';
 import { infoHuntLog, infoLog, infoLogEnd } from './helpers/logs';
 
 export type Inventory = Armor | Sword | Item;
@@ -16,24 +16,23 @@ export const playerMaxHp: number = 100;
 export const playerHp: number = playerMaxHp;
 export const eatValue: number = 10;
 export const coins: number = 500;
-export const equipment = {
+export let equipment = {
   sword: WoodenSword,
   armor: ClothArmor,
 };
-export const inventory: Inventory[] = [
-  item.testItem,
-  equipment.sword,
-  equipment.armor,
-];
-export const allItems: Inventory[] = Object.values(item);
-export let allEquipment: Inventory[] = Object.values(sword)
-export const armors = Object.values(armor)
+export let inventory: Inventory[] = [item.testItem];
+export const allItems: Item[] = Object.values(item);
+export let allEquipment: (Sword | Armor)[] = Object.values(sword);
+export const armors = Object.values(armor);
 export let maxExp = 100;
+export let playerAttack = 10;
+export let playerDefense = 5;
 
 export const changeMaxExp = (n: number) => {
   maxExp *= n;
 };
 
+inventory = [item.testItem, WoodenSword, ClothArmor];
 export interface Player {
   name: string;
   origin?: string;
@@ -58,8 +57,8 @@ export const p1: Player = {
   hp: playerHp,
   lvl: 1,
   exp: 0,
-  attack: 10,
-  defense: 5,
+  attack: playerAttack,
+  defense: playerDefense,
   location: Area.CITY,
 };
 
@@ -180,6 +179,8 @@ export const battle = (player: Player, monster: Monster) => {
 };
 
 export const setupStats = (player: Player) => {
+  player.attack = playerAttack;
+  player.defense = playerDefense;
   player.attack += player.equipment.sword.attack + (player.lvl - 1);
   player.defense += player.equipment.armor.defense + (player.lvl - 1);
 };
@@ -197,6 +198,14 @@ export const hunt = (player: Player, arr: Monster[]) => {
 export const showInventory = (player: Player) => {
   infoLog();
   for (let i = 0; i < player.inventory.length; i++) {
+    if (player.inventory[i].type === 'noArmor') {
+      continue;
+    }
+
+    if (player.inventory[i].type === 'noSword') {
+      continue;
+    }
+
     console.log(`${i + 1}. ${player.inventory[i].name}`);
   }
   infoLogEnd();
@@ -238,5 +247,23 @@ export const locationInfo = (player: Player) => {
       console.log('or sell items from your inventory to get money');
       infoLogEnd();
       break;
+  }
+};
+
+export const changeSword = (player: Player, sword: Sword) => {
+  if (player.inventory.includes(sword)) {
+    player.equipment.sword = sword;
+    setupStats(player);
+  } else {
+    throwErr(`It's look like you don't have this item in your inventory.`);
+  }
+};
+
+export const changeArmor = (player: Player, armor: Armor) => {
+  if (player.inventory.includes(armor)) {
+    player.equipment.armor = armor;
+    setupStats(player);
+  } else {
+    throwErr(`It's look like you don't have this item in your inventory.`);
   }
 };
