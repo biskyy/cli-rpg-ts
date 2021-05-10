@@ -1,7 +1,8 @@
-import { Sword } from '../items/swords'
-import { Armor } from '../items/armors'
-import { Item } from '../items/items'
+import { Sword } from '../items/swords';
+import { Armor } from '../items/armors';
+import { Item } from '../items/items';
 import { Inventory } from '../player';
+import { infoLog, infoLogEnd } from './logs';
 
 export const cls = () => {
   console.clear();
@@ -45,4 +46,11 @@ export const randomEquipmentFromArr = (arr: (Armor | Sword)[], n: number) => {
     taken[x] = --len in taken ? taken[len] : len;
   }
   return result;
+};
+
+export const throwErr = (details: string) => {
+  infoLog();
+  console.log('Uh Oh. Something went wrong!');
+  console.log(`Details: ${details}`);
+  infoLogEnd();
 };

@@ -1,23 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.randomEquipmentFromArr = exports.randomItemsFromArr = exports.randomFromArr = exports.timeSleep = exports.cls = void 0;
-var cls = function () {
+exports.throwErr = exports.randomEquipmentFromArr = exports.randomItemsFromArr = exports.randomFromArr = exports.timeSleep = exports.cls = void 0;
+const logs_1 = require("./logs");
+const cls = () => {
     console.clear();
 };
 exports.cls = cls;
-var timeSleep = function (milliseconds) {
-    var date = Date.now();
-    var currentDate = null;
+const timeSleep = (milliseconds) => {
+    const date = Date.now();
+    let currentDate = null;
     do {
         currentDate = Date.now();
     } while (currentDate - date < milliseconds);
 };
 exports.timeSleep = timeSleep;
-var randomFromArr = function (arr) {
+const randomFromArr = (arr) => {
     return arr[Math.floor(Math.random() * arr.length)];
 };
 exports.randomFromArr = randomFromArr;
-var randomItemsFromArr = function (arr, n) {
+const randomItemsFromArr = (arr, n) => {
     var result = new Array(n), len = arr.length, taken = new Array(len);
     if (n > len)
         throw new RangeError('getRandom: more elements taken than available');
@@ -29,7 +30,7 @@ var randomItemsFromArr = function (arr, n) {
     return result;
 };
 exports.randomItemsFromArr = randomItemsFromArr;
-var randomEquipmentFromArr = function (arr, n) {
+const randomEquipmentFromArr = (arr, n) => {
     var result = new Array(n), len = arr.length, taken = new Array(len);
     if (n > len)
         throw new RangeError('getRandom: more elements taken than available');
@@ -41,3 +42,10 @@ var randomEquipmentFromArr = function (arr, n) {
     return result;
 };
 exports.randomEquipmentFromArr = randomEquipmentFromArr;
+const throwErr = (details) => {
+    logs_1.infoLog();
+    console.log('Uh Oh. Something went wrong!');
+    console.log(`Details: ${details}`);
+    logs_1.infoLogEnd();
+};
+exports.throwErr = throwErr;
