@@ -1,18 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.playMenu = void 0;
-var inquirer = require('inquirer');
-var player_1 = require("../player");
-var area_1 = require("../locations/area");
-var city_1 = require("../locations/city");
-var mainMenu_1 = require("./mainMenu");
-var goToMenu_1 = require("./goToMenu");
-var shopMenu_1 = require("./shopMenu");
-var homeMenu_1 = require("./homeMenu");
-var utils_1 = require("../helpers/utils");
-var monsters_1 = require("../monsters");
-var playMenu = function (player) {
-    var _choices;
+const inquirer = require('inquirer');
+const player_1 = require("../player");
+const area_1 = require("../locations/area");
+const city_1 = require("../locations/city");
+const mainMenu_1 = require("./mainMenu");
+const goToMenu_1 = require("./goToMenu");
+const shopMenu_1 = require("./shopMenu");
+const homeMenu_1 = require("./homeMenu");
+const utils_1 = require("../helpers/utils");
+const monsters_1 = require("../monsters");
+const bsMenu_1 = require("./bsMenu");
+const playMenu = (player) => {
+    let _choices;
     switch (player.location) {
         case area_1.Area.CITY:
             _choices = [
@@ -42,7 +43,7 @@ var playMenu = function (player) {
             pageSize: 12,
         },
     ])
-        .then(function (answers) {
+        .then((answers) => {
         switch (answers.choice) {
             case 'Help':
                 utils_1.cls();
@@ -60,8 +61,8 @@ var playMenu = function (player) {
                 break;
             case 'Blacksmith':
                 utils_1.cls();
-                console.log('not implemented');
-                exports.playMenu(player);
+                player.location = city_1.City.BLACKSMITH;
+                bsMenu_1.bsMenu(player);
                 break;
             case 'Profile':
                 utils_1.cls();

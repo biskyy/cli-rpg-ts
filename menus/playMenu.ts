@@ -8,6 +8,7 @@ import { shopMenu } from './shopMenu';
 import { homeMenu } from './homeMenu';
 import { cls } from '../helpers/utils';
 import { monsters } from '../monsters';
+import { bsMenu } from './bsMenu';
 
 export const playMenu = (player: Player) => {
   let _choices;
@@ -62,8 +63,8 @@ export const playMenu = (player: Player) => {
           break;
         case 'Blacksmith':
           cls();
-          console.log('not implemented');
-          playMenu(player);
+          player.location = City.BLACKSMITH
+          bsMenu(player);
           break;
         case 'Profile':
           cls();
