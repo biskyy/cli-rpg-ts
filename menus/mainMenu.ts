@@ -1,7 +1,8 @@
-const inquirer = require('inquirer')
-import { Player, profile } from '../player'
-import { cls } from '../helpers/utils'
-import { playMenu } from './playMenu'
+const inquirer = require('inquirer');
+import { Player } from '../player/player';
+import { cls } from '../helpers/utils';
+import { playMenu } from './playMenu';
+import { profile } from '../player/playerUtils';
 
 export const mainMenu = (player: Player) => {
   return inquirer

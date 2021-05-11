@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mainMenu = void 0;
 const inquirer = require('inquirer');
-const player_1 = require("../player");
 const utils_1 = require("../helpers/utils");
 const playMenu_1 = require("./playMenu");
+const playerUtils_1 = require("../player/playerUtils");
 const mainMenu = (player) => {
     return inquirer
         .prompt([
@@ -23,7 +23,7 @@ const mainMenu = (player) => {
                 break;
             case 'Profile':
                 utils_1.cls();
-                player_1.profile(player);
+                playerUtils_1.profile(player);
                 exports.mainMenu(player);
                 break;
             case 'Exit':
