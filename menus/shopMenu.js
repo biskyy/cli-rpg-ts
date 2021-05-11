@@ -5,7 +5,8 @@ const inquirer = require('inquirer');
 const logs_1 = require("../helpers/logs");
 const utils_1 = require("../helpers/utils");
 const area_1 = require("../locations/area");
-const player_1 = require("../player");
+const player_1 = require("../player/player");
+const playerUtils_1 = require("../player/playerUtils");
 const confirmMenu_1 = require("./confirmMenu");
 const playMenu_1 = require("./playMenu");
 const shopMenu = (player) => {
@@ -40,7 +41,7 @@ const shopMenu = (player) => {
                 break;
             case 'Help':
                 utils_1.cls();
-                player_1.locationInfo(player);
+                playerUtils_1.locationInfo(player);
                 break;
             case 'Exit':
                 utils_1.cls();

@@ -2,7 +2,8 @@ const inquirer = require('inquirer');
 import { infoLog, infoLogEnd, infoShopLog } from '../helpers/logs';
 import { cls, randomItemsFromArr } from '../helpers/utils';
 import { Area } from '../locations/area';
-import { allItems, Inventory, locationInfo, Player } from '../player';
+import { allItems, Inventory, Player } from '../player/player';
+import { locationInfo } from '../player/playerUtils';
 import { confirmMenu } from './confirmMenu';
 import { playMenu } from './playMenu';
 
