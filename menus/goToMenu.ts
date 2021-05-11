@@ -1,9 +1,9 @@
-const inquirer = require('inquirer')
-import { Area } from '../locations/area'
-import { cls } from '../helpers/utils'
-import { infoLog, infoLogEnd } from '../helpers/logs'
-import { playMenu } from './playMenu'
-import { Player } from '../player'
+const inquirer = require('inquirer');
+import { Area } from '../locations/area';
+import { cls } from '../helpers/utils';
+import { infoLog, infoLogEnd } from '../helpers/logs';
+import { playMenu } from './playMenu';
+import { Player } from '../player/player';
 
 export const goToMenu = (player: Player) => {
   let _choices = Object.values(Area);
