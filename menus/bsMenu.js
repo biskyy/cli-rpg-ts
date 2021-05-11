@@ -1,13 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bsSellMenu = exports.bsBuyMenu = exports.bsMenu = void 0;
-const player_1 = require("../player");
+const player_1 = require("../player/player");
 const utils_1 = require("../helpers/utils");
 const logs_1 = require("../helpers/logs");
 const playMenu_1 = require("./playMenu");
 const area_1 = require("../locations/area");
 const confirmMenu_1 = require("./confirmMenu");
 const noItem_1 = require("../items/noItem");
+const playerUtils_1 = require("../player/playerUtils");
 const inquirer = require('inquirer');
 const bsMenu = (player) => {
     return inquirer
@@ -47,7 +48,7 @@ const bsMenu = (player) => {
                 }
                 break;
             case 'Help':
-                player_1.locationInfo(player);
+                playerUtils_1.locationInfo(player);
                 break;
         }
     });
@@ -150,7 +151,7 @@ const bsSellMenu = (player) => {
                         let _confirmation = await confirmMenu_1.confirmMenu('you want to continue');
                         if (_confirmation) {
                             player.inventory.push(noItem_1.noSword);
-                            player_1.changeSword(player, noItem_1.noSword);
+                            playerUtils_1.changeSword(player, noItem_1.noSword);
                         }
                         else {
                             utils_1.cls();
@@ -169,7 +170,7 @@ const bsSellMenu = (player) => {
                         let _confirmation = await confirmMenu_1.confirmMenu('you want to continue');
                         if (_confirmation) {
                             player.inventory.push(noItem_1.noArmor);
-                            player_1.changeArmor(player, noItem_1.noArmor);
+                            playerUtils_1.changeArmor(player, noItem_1.noArmor);
                         }
                         else {
                             utils_1.cls();

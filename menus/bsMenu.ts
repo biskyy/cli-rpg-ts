@@ -1,10 +1,4 @@
-import {
-  allEquipment,
-  changeArmor,
-  changeSword,
-  locationInfo,
-  Player,
-} from '../player';
+import { allEquipment, Player } from '../player/player';
 import { cls, randomEquipmentFromArr } from '../helpers/utils';
 import { Sword } from '../items/swords';
 import { Armor } from '../items/armors';
@@ -14,6 +8,7 @@ import { Area } from '../locations/area';
 import { shopMenu } from './shopMenu';
 import { confirmMenu } from './confirmMenu';
 import { noArmor, noSword } from '../items/noItem';
+import { changeArmor, changeSword, locationInfo } from '../player/playerUtils';
 
 const inquirer = require('inquirer');
 
