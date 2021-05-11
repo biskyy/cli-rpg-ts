@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.playMenu = void 0;
 const inquirer = require('inquirer');
-const player_1 = require("../player");
+const player_1 = require("../player/player");
 const area_1 = require("../locations/area");
 const city_1 = require("../locations/city");
 const mainMenu_1 = require("./mainMenu");
@@ -12,6 +12,7 @@ const homeMenu_1 = require("./homeMenu");
 const utils_1 = require("../helpers/utils");
 const monsters_1 = require("../monsters");
 const bsMenu_1 = require("./bsMenu");
+const playerUtils_1 = require("../player/playerUtils");
 const playMenu = (player) => {
     let _choices;
     switch (player.location) {
@@ -47,7 +48,7 @@ const playMenu = (player) => {
         switch (answers.choice) {
             case 'Help':
                 utils_1.cls();
-                player_1.locationInfo(player);
+                playerUtils_1.locationInfo(player);
                 exports.playMenu(player);
                 break;
             case 'Hunt':
@@ -66,12 +67,12 @@ const playMenu = (player) => {
                 break;
             case 'Profile':
                 utils_1.cls();
-                player_1.profile(player);
+                playerUtils_1.profile(player);
                 exports.playMenu(player);
                 break;
             case 'Inventory':
                 utils_1.cls();
-                player_1.showInventory(player);
+                playerUtils_1.showInventory(player);
                 exports.playMenu(player);
                 break;
             case 'Go to..':

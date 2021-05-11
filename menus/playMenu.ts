@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-import { Player, locationInfo, hunt, profile, showInventory } from '../player';
+import { Player, hunt } from '../player/player';
 import { Area } from '../locations/area';
 import { City } from '../locations/city';
 import { mainMenu } from './mainMenu';
@@ -9,6 +9,7 @@ import { homeMenu } from './homeMenu';
 import { cls } from '../helpers/utils';
 import { monsters } from '../monsters';
 import { bsMenu } from './bsMenu';
+import { locationInfo, profile, showInventory } from '../player/playerUtils';
 
 export const playMenu = (player: Player) => {
   let _choices;
@@ -63,7 +64,7 @@ export const playMenu = (player: Player) => {
           break;
         case 'Blacksmith':
           cls();
-          player.location = City.BLACKSMITH
+          player.location = City.BLACKSMITH;
           bsMenu(player);
           break;
         case 'Profile':
