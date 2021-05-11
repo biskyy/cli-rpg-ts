@@ -2,11 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.homeMenu = void 0;
 const inquirer = require('inquirer');
-const player_1 = require("../player");
+const player_1 = require("../player/player");
 const utils_1 = require("../helpers/utils");
 const logs_1 = require("../helpers/logs");
 const area_1 = require("../locations/area");
 const playMenu_1 = require("./playMenu");
+const playerUtils_1 = require("../player/playerUtils");
 const homeMenu = (player) => {
     return inquirer
         .prompt([
@@ -31,7 +32,7 @@ const homeMenu = (player) => {
                 break;
             case 'Help':
                 utils_1.cls();
-                player_1.locationInfo(player);
+                playerUtils_1.locationInfo(player);
                 exports.homeMenu(player);
                 break;
             case 'Exit':

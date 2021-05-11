@@ -1,9 +1,10 @@
-const inquirer = require('inquirer')
-import { Player, eat, sleep, locationInfo } from '../player'
-import { cls } from '../helpers/utils'
-import { infoLog, infoLogEnd } from '../helpers/logs'
-import { Area } from '../locations/area'
-import { playMenu } from './playMenu'
+const inquirer = require('inquirer');
+import { Player, eat, sleep } from '../player/player';
+import { cls } from '../helpers/utils';
+import { infoLog, infoLogEnd } from '../helpers/logs';
+import { Area } from '../locations/area';
+import { playMenu } from './playMenu';
+import { locationInfo } from '../player/playerUtils';
 
 export const homeMenu = (player: Player) => {
   return inquirer
