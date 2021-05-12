@@ -28,7 +28,7 @@ const mainMenu = (player) => {
                 break;
             case 'Exit':
                 utils_1.cls();
-                process.exit(1);
+                process.exit(0);
                 break;
             default:
                 break;

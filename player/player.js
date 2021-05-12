@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.hunt = exports.battle = exports.sleep = exports.eat = exports.attack = exports.p1 = exports.changeMaxExp = exports.playerDefense = exports.playerAttack = exports.maxExp = exports.armors = exports.allEquipment = exports.allItems = exports.inventory = exports.equipment = exports.coins = exports.eatValue = exports.playerHp = exports.playerMaxHp = void 0;
+exports.hunt = exports.battle = exports.sleep = exports.eat = exports.attack = exports.p1 = exports.changeMaxExp = exports.stats = exports.playerDefense = exports.playerAttack = exports.maxExp = exports.armors = exports.allEquipment = exports.allItems = exports.inventory = exports.equipment = exports.coins = exports.eatValue = exports.playerHp = exports.playerMaxHp = void 0;
 const logs_1 = require("../helpers/logs");
 const utils_1 = require("../helpers/utils");
 const armor = require("../items/armors");
@@ -24,11 +24,13 @@ exports.armors = Object.values(armor);
 exports.maxExp = 100;
 exports.playerAttack = 10;
 exports.playerDefense = 5;
+exports.stats = {
+    monstersKilled: 0,
+};
 const changeMaxExp = (n) => {
     exports.maxExp *= n;
 };
 exports.changeMaxExp = changeMaxExp;
-exports.inventory = [item.testItem];
 exports.p1 = {
     name: 'Adventurer',
     equipment: exports.equipment,
@@ -41,6 +43,7 @@ exports.p1 = {
     attack: exports.playerAttack,
     defense: exports.playerDefense,
     location: area_1.Area.CITY,
+    stats: exports.stats,
     gameOver: false,
 };
 const attack = (player, monster) => {
@@ -96,9 +99,9 @@ const battle = (player, monster) => {
     while (true) {
         exports.attack(player, monster);
         utils_1.timeSleep(1500);
-        if (player.hp <= 0) {
+        if (playerUtils_1.checkPlayerDead(player)) {
             logs_1.infoLog();
-            console.log('Looks like you died to a ' + monster.name + '!');
+            console.log(`Uh Oh! Looks like you died to a ${monster.name}!`);
             logs_1.infoLogEnd();
             break;
         }
@@ -111,15 +114,8 @@ const battle = (player, monster) => {
             logs_1.infoLogEnd();
             player.exp += monster.exp;
             player.coins += monster.coins;
-            if (player.exp > exports.maxExp) {
-                player.exp = 0;
-                player.lvl += 1;
-                exports.changeMaxExp(1.2);
-                logs_1.infoLog();
-                console.log(`You leveled up! Congrats, you're now level ${player.lvl}`);
-                logs_1.infoLogEnd();
-                playerUtils_1.setupStats(player);
-            }
+            player.stats.monstersKilled += 1;
+            playerUtils_1.checkExp(player);
             break;
         }
     }

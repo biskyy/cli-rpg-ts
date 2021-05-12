@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changeArmor = exports.changeSword = exports.locationInfo = exports.showInventory = exports.setupStats = exports.profile = void 0;
+exports.checkPlayerDead = exports.checkExp = exports.changeArmor = exports.changeSword = exports.locationInfo = exports.showInventory = exports.setupStats = exports.profile = void 0;
 const logs_1 = require("../helpers/logs");
 const utils_1 = require("../helpers/utils");
 const area_1 = require("../locations/area");
@@ -105,3 +105,30 @@ const changeArmor = (player, armor) => {
     }
 };
 exports.changeArmor = changeArmor;
+const checkExp = (player) => {
+    if (player.exp > player_1.maxExp) {
+        updateLvl(player);
+    }
+    else {
+        return;
+    }
+};
+exports.checkExp = checkExp;
+const updateLvl = (player) => {
+    player.exp = 0;
+    player.lvl += 1;
+    player_1.changeMaxExp(1.2);
+    logs_1.infoLog();
+    console.log(`You leveled up! Congrats, you're now level ${player.lvl}`);
+    logs_1.infoLogEnd();
+    exports.setupStats(player);
+};
+const checkPlayerDead = (player) => {
+    if (player.hp <= 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
+};
+exports.checkPlayerDead = checkPlayerDead;

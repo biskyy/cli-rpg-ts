@@ -29,7 +29,7 @@ export const mainMenu = (player: Player) => {
 
         case 'Exit':
           cls();
-          process.exit(1);
+          process.exit(0);
           break;
 
         default:
