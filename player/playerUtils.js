@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.stats = exports.checkPlayerDead = exports.checkExp = exports.changeArmor = exports.changeSword = exports.locationInfo = exports.inventory = exports.setupStats = exports.profile = void 0;
+exports.checkHunterPerk = exports.newPerkInfo = exports.perks = exports.stats = exports.checkPlayerDead = exports.checkExp = exports.changeArmor = exports.changeSword = exports.locationInfo = exports.inventory = exports.setupStats = exports.profile = void 0;
 const logs_1 = require("../helpers/logs");
 const utils_1 = require("../helpers/utils");
 const area_1 = require("../locations/area");
 const city_1 = require("../locations/city");
+const perks_1 = require("./perks");
 const player_1 = require("./player");
 const profile = (player) => {
     logs_1.infoLog();
@@ -25,7 +26,10 @@ exports.profile = profile;
 const setupStats = (player) => {
     player.attack = player_1.playerAttack;
     player.defense = player_1.playerDefense;
-    player.attack += player.equipment.sword.attack + (player.lvl - 1);
+    player.attack +=
+        player.equipment.sword.attack +
+            (player.lvl - 1) +
+            player.stats.strength.count;
     player.defense += player.equipment.armor.defense + (player.lvl - 1);
 };
 exports.setupStats = setupStats;
@@ -138,3 +142,29 @@ const stats = (player) => {
     }
 };
 exports.stats = stats;
+const perks = (player) => {
+    if (player.perks.length > 0) {
+        for (let i = 0; i < player.perks.length; i++) {
+            console.log(player.perks[i]);
+        }
+    }
+    else {
+        logs_1.infoLog();
+        console.log("Looks like you don't have any perks!");
+        logs_1.infoLogEnd();
+    }
+};
+exports.perks = perks;
+const newPerkInfo = (player, perk) => {
+    logs_1.infoLog();
+    console.log(`Congratulations! You have earned a new perk: ${perk}`);
+    logs_1.infoLogEnd();
+};
+exports.newPerkInfo = newPerkInfo;
+const checkHunterPerk = (player) => {
+    if (player.stats.monstersKilled.count >= 50) {
+        player.perks.push(perks_1.Perk.HUNTER);
+        exports.newPerkInfo(player, perks_1.Perk.HUNTER);
+    }
+};
+exports.checkHunterPerk = checkHunterPerk;
