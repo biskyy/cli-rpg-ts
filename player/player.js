@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.hunt = exports.battle = exports.sleep = exports.eat = exports.attack = exports.p1 = exports.changeMaxExp = exports.stats = exports.playerDefense = exports.playerAttack = exports.maxExp = exports.armors = exports.allEquipment = exports.allItems = exports.inventory = exports.equipment = exports.coins = exports.eatValue = exports.playerHp = exports.playerMaxHp = void 0;
+exports.hunt = exports.battle = exports.sleep = exports.eat = exports.attack = exports.p1 = exports.changeMaxExp = exports.perks = exports.stats = exports.playerDefense = exports.playerAttack = exports.maxExp = exports.armors = exports.allEquipment = exports.allItems = exports.inventory = exports.equipment = exports.coins = exports.eatValue = exports.playerHp = exports.playerMaxHp = void 0;
 const logs_1 = require("../helpers/logs");
 const utils_1 = require("../helpers/utils");
 const armor = require("../items/armors");
@@ -24,12 +24,12 @@ exports.armors = Object.values(armor);
 exports.maxExp = 100;
 exports.playerAttack = 10;
 exports.playerDefense = 5;
-exports.stats = [
-    {
-        name: 'Monsters killed',
-        count: 0,
-    },
-];
+exports.stats = {
+    monstersKilled: { name: 'Monsters killed', count: 0 },
+    strength: { name: 'Strength', count: 0 },
+    treesChopped: { name: 'Trees chopped', count: 0 },
+};
+exports.perks = [];
 const changeMaxExp = (n) => {
     exports.maxExp *= n;
 };
@@ -47,6 +47,7 @@ exports.p1 = {
     defense: exports.playerDefense,
     location: area_1.Area.CITY,
     stats: exports.stats,
+    perks: exports.perks,
     gameOver: false,
 };
 const attack = (player, monster) => {
@@ -117,7 +118,8 @@ const battle = (player, monster) => {
             logs_1.infoLogEnd();
             player.exp += monster.exp;
             player.coins += monster.coins;
-            player.stats[0].count += 1;
+            player.stats.monstersKilled.count += 1;
+            playerUtils_1.checkHunterPerk(player);
             playerUtils_1.checkExp(player);
             break;
         }
