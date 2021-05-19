@@ -9,7 +9,8 @@ import * as sword from '../items/swords';
 import { Sword } from '../items/swords';
 import { Area } from '../locations/area';
 import { Monster } from '../monsters';
-import { checkExp, checkPlayerDead, setupStats } from './playerUtils';
+import { Perk } from './perks';
+import { checkExp, checkHunterPerk, checkPlayerDead } from './playerUtils';
 
 export type Inventory = Armor | Sword | Item;
 
@@ -29,8 +30,11 @@ export let maxExp = 100;
 export let playerAttack = 10;
 export let playerDefense = 5;
 export let stats = {
-  monstersKilled: 0,
+  monstersKilled: { name: 'Monsters killed', count: 0 },
+  strength: { name: 'Strength', count: 0 },
+  treesChopped: { name: 'Trees chopped', count: 0 },
 };
+export let perks = [];
 
 export const changeMaxExp = (n: number) => {
   maxExp *= n;
@@ -50,6 +54,7 @@ export interface Player {
   defense: number;
   location: string;
   stats: typeof stats;
+  perks: Perk[];
   gameOver: boolean;
 }
 
@@ -66,6 +71,7 @@ export const p1: Player = {
   defense: playerDefense,
   location: Area.CITY,
   stats: stats,
+  perks: perks,
   gameOver: false,
 };
 
@@ -152,7 +158,8 @@ export const battle = (player: Player, monster: Monster) => {
 
       player.exp += monster.exp;
       player.coins += monster.coins;
-      player.stats.monstersKilled += 1;
+      player.stats.monstersKilled.count += 1;
+      checkHunterPerk(player);
       checkExp(player);
 
       break;
