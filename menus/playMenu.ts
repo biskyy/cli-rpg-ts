@@ -9,7 +9,8 @@ import { homeMenu } from './homeMenu';
 import { cls } from '../helpers/utils';
 import { monsters } from '../monsters';
 import { bsMenu } from './bsMenu';
-import { locationInfo, profile, showInventory } from '../player/playerUtils';
+import { locationInfo, profile, inventory } from '../player/playerUtils';
+import { playerMenu } from './playerMenu';
 
 export const playMenu = (player: Player) => {
   let _choices;
@@ -20,8 +21,7 @@ export const playMenu = (player: Player) => {
         'Home',
         'Shop',
         'Blacksmith',
-        'Profile',
-        'Inventory',
+        'Player Info',
         'Go to..',
         'Help',
         'Back',
@@ -29,7 +29,7 @@ export const playMenu = (player: Player) => {
       break;
 
     case Area.FOREST:
-      _choices = ['Hunt', 'Profile', 'Inventory', 'Go to..', 'Help', 'Back'];
+      _choices = ['Hunt', 'Player Info', 'Go to..', 'Help', 'Back'];
       break;
 
     default:
@@ -67,15 +67,9 @@ export const playMenu = (player: Player) => {
           player.location = City.BLACKSMITH;
           bsMenu(player);
           break;
-        case 'Profile':
+        case 'Player Info':
           cls();
-          profile(player);
-          playMenu(player);
-          break;
-        case 'Inventory':
-          cls();
-          showInventory(player);
-          playMenu(player);
+          playerMenu(player);
           break;
         case 'Go to..':
           cls();
