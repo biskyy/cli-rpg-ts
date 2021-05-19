@@ -4,7 +4,8 @@
   "description": "A simple rpg-game made using Typescript with InquirerJS.",
   "main": "app.js",
   "scripts": {
-    "build": "tsc && node app.js"
+    "build": "tsc && node app.js",
+    "start": "node app.js"
   },
   "author": "biskyy",
   "license": "ISC",
