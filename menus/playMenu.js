@@ -13,6 +13,7 @@ const utils_1 = require("../helpers/utils");
 const monsters_1 = require("../monsters");
 const bsMenu_1 = require("./bsMenu");
 const playerUtils_1 = require("../player/playerUtils");
+const playerMenu_1 = require("./playerMenu");
 const playMenu = (player) => {
     let _choices;
     switch (player.location) {
@@ -21,15 +22,14 @@ const playMenu = (player) => {
                 'Home',
                 'Shop',
                 'Blacksmith',
-                'Profile',
-                'Inventory',
+                'Player Info',
                 'Go to..',
                 'Help',
                 'Back',
             ];
             break;
         case area_1.Area.FOREST:
-            _choices = ['Hunt', 'Profile', 'Inventory', 'Go to..', 'Help', 'Back'];
+            _choices = ['Hunt', 'Player Info', 'Go to..', 'Help', 'Back'];
             break;
         default:
             break;
@@ -65,15 +65,9 @@ const playMenu = (player) => {
                 player.location = city_1.City.BLACKSMITH;
                 bsMenu_1.bsMenu(player);
                 break;
-            case 'Profile':
+            case 'Player Info':
                 utils_1.cls();
-                playerUtils_1.profile(player);
-                exports.playMenu(player);
-                break;
-            case 'Inventory':
-                utils_1.cls();
-                playerUtils_1.showInventory(player);
-                exports.playMenu(player);
+                playerMenu_1.playerMenu(player);
                 break;
             case 'Go to..':
                 utils_1.cls();
