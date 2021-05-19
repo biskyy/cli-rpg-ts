@@ -4,6 +4,7 @@ import { Armor } from '../items/armors';
 import { Sword } from '../items/swords';
 import { Area } from '../locations/area';
 import { City } from '../locations/city';
+import { Perk } from './perks';
 import {
   changeMaxExp,
   maxExp,
@@ -31,11 +32,14 @@ export const profile = (player: Player) => {
 export const setupStats = (player: Player) => {
   player.attack = playerAttack;
   player.defense = playerDefense;
-  player.attack += player.equipment.sword.attack + (player.lvl - 1);
+  player.attack +=
+    player.equipment.sword.attack +
+    (player.lvl - 1) +
+    player.stats.strength.count;
   player.defense += player.equipment.armor.defense + (player.lvl - 1);
 };
 
-export const showInventory = (player: Player) => {
+export const inventory = (player: Player) => {
   infoLog();
   for (let i = 0; i < player.inventory.length; i++) {
     if (player.inventory[i].type === 'noArmor') {
@@ -140,5 +144,36 @@ export const checkPlayerDead = (player: Player) => {
     return true;
   } else {
     return false;
+  }
+};
+
+export const stats = (player: Player) => {
+  for (let i in player.stats) {
+    console.log(`${player.stats[i].name}: ${player.stats[i].count}`);
+  }
+};
+
+export const perks = (player: Player) => {
+  if (player.perks.length > 0) {
+    for (let i = 0; i < player.perks.length; i++) {
+      console.log(player.perks[i]);
+    }
+  } else {
+    infoLog();
+    console.log("Looks like you don't have any perks!");
+    infoLogEnd();
+  }
+};
+
+export const newPerkInfo = (player: Player, perk: Perk) => {
+  infoLog();
+  console.log(`Congratulations! You have earned a new perk: ${perk}`);
+  infoLogEnd();
+};
+
+export const checkHunterPerk = (player: Player) => {
+  if (player.stats.monstersKilled.count >= 50) {
+    player.perks.push(Perk.HUNTER);
+    newPerkInfo(player, Perk.HUNTER);
   }
 };
