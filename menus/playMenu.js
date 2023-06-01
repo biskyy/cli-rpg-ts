@@ -44,43 +44,43 @@ const playMenu = (player) => {
             pageSize: 12,
         },
     ])
-        .then((answers) => {
+        .then(async (answers) => {
         switch (answers.choice) {
             case 'Help':
-                utils_1.cls();
-                playerUtils_1.locationInfo(player);
-                exports.playMenu(player);
+                (0, utils_1.cls)();
+                await (0, playerUtils_1.locationInfo)(player);
+                (0, exports.playMenu)(player);
                 break;
             case 'Hunt':
-                player_1.hunt(player, monsters_1.monsters);
-                exports.playMenu(player);
+                (0, player_1.hunt)(player, monsters_1.monsters);
+                (0, exports.playMenu)(player);
                 break;
             case 'Shop':
-                utils_1.cls();
+                (0, utils_1.cls)();
                 player.location = city_1.City.SHOP;
-                shopMenu_1.shopMenu(player);
+                (0, shopMenu_1.shopMenu)(player);
                 break;
             case 'Blacksmith':
-                utils_1.cls();
+                (0, utils_1.cls)();
                 player.location = city_1.City.BLACKSMITH;
-                bsMenu_1.bsMenu(player);
+                (0, bsMenu_1.bsMenu)(player);
                 break;
             case 'Player Info':
-                utils_1.cls();
-                playerMenu_1.playerMenu(player);
+                (0, utils_1.cls)();
+                (0, playerMenu_1.playerMenu)(player);
                 break;
             case 'Go to..':
-                utils_1.cls();
-                goToMenu_1.goToMenu(player);
+                (0, utils_1.cls)();
+                (0, goToMenu_1.goToMenu)(player);
                 break;
             case 'Home':
-                utils_1.cls();
+                (0, utils_1.cls)();
                 player.location = city_1.City.HOME;
-                homeMenu_1.homeMenu(player);
+                (0, homeMenu_1.homeMenu)(player);
                 break;
             case 'Back':
-                utils_1.cls();
-                mainMenu_1.mainMenu(player);
+                (0, utils_1.cls)();
+                (0, mainMenu_1.mainMenu)(player);
                 break;
         }
     });

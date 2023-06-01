@@ -23,19 +23,19 @@ const goToMenu = (player) => {
         switch (answers.choice) {
             case area_1.Area.CITY:
                 player.location = area_1.Area.CITY;
-                utils_1.cls();
-                logs_1.infoLog();
+                (0, utils_1.cls)();
+                (0, logs_1.infoLog)();
                 console.log('You are now in your city!');
-                logs_1.infoLogEnd();
-                playMenu_1.playMenu(player);
+                (0, logs_1.infoLogEnd)();
+                (0, playMenu_1.playMenu)(player);
                 break;
             case area_1.Area.FOREST:
                 player.location = area_1.Area.FOREST;
-                utils_1.cls();
-                logs_1.infoLog();
+                (0, utils_1.cls)();
+                (0, logs_1.infoLog)();
                 console.log('You are now in the forest near your city.');
-                logs_1.infoLogEnd();
-                playMenu_1.playMenu(player);
+                (0, logs_1.infoLogEnd)();
+                (0, playMenu_1.playMenu)(player);
                 break;
         }
     });

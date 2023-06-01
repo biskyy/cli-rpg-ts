@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-import { Player, hunt } from '../player/player';
+import { PlayerI, hunt } from '../player/player';
 import { Area } from '../locations/area';
 import { City } from '../locations/city';
 import { mainMenu } from './mainMenu';
@@ -12,7 +12,7 @@ import { bsMenu } from './bsMenu';
 import { locationInfo, profile, inventory } from '../player/playerUtils';
 import { playerMenu } from './playerMenu';
 
-export const playMenu = (player: Player) => {
+export const playMenu = (player: PlayerI) => {
   let _choices;
 
   switch (player.location) {
@@ -46,11 +46,11 @@ export const playMenu = (player: Player) => {
         pageSize: 12,
       },
     ])
-    .then((answers) => {
+    .then(async (answers) => {
       switch (answers.choice) {
         case 'Help':
           cls();
-          locationInfo(player);
+          await locationInfo(player);
           playMenu(player);
           break;
         case 'Hunt':

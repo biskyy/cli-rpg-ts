@@ -18,30 +18,30 @@ const homeMenu = (player) => {
             choices: ['Eat', 'Sleep', 'Help', 'Exit'],
         },
     ])
-        .then((answers) => {
+        .then(async (answers) => {
         switch (answers.choice) {
             case 'Eat':
-                utils_1.cls();
-                player_1.eat(player);
-                exports.homeMenu(player);
+                (0, utils_1.cls)();
+                (0, player_1.eat)(player);
+                (0, exports.homeMenu)(player);
                 break;
             case 'Sleep':
-                utils_1.cls();
-                player_1.sleep(player);
-                exports.homeMenu(player);
+                (0, utils_1.cls)();
+                (0, player_1.sleep)(player);
+                (0, exports.homeMenu)(player);
                 break;
             case 'Help':
-                utils_1.cls();
-                playerUtils_1.locationInfo(player);
-                exports.homeMenu(player);
+                (0, utils_1.cls)();
+                await (0, playerUtils_1.locationInfo)(player);
+                (0, exports.homeMenu)(player);
                 break;
             case 'Exit':
-                utils_1.cls();
-                logs_1.infoLog();
+                (0, utils_1.cls)();
+                (0, logs_1.infoLog)();
                 console.log('You leave your house.');
-                logs_1.infoLogEnd();
+                (0, logs_1.infoLogEnd)();
                 player.location = area_1.Area.CITY;
-                playMenu_1.playMenu(player);
+                (0, playMenu_1.playMenu)(player);
                 break;
         }
     });

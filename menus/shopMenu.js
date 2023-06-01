@@ -1,7 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.shopSellMenu = exports.shopBuyMenu = exports.shopMenu = void 0;
-const inquirer = require('inquirer');
+const inquirer_1 = __importDefault(require("inquirer"));
 const logs_1 = require("../helpers/logs");
 const utils_1 = require("../helpers/utils");
 const area_1 = require("../locations/area");
@@ -9,8 +12,8 @@ const player_1 = require("../player/player");
 const playerUtils_1 = require("../player/playerUtils");
 const confirmMenu_1 = require("./confirmMenu");
 const playMenu_1 = require("./playMenu");
-const shopMenu = (player) => {
-    return inquirer
+const shopMenu = async (player) => {
+    return inquirer_1.default
         .prompt([
         {
             type: 'list',
@@ -19,44 +22,45 @@ const shopMenu = (player) => {
             choices: ['Buy', 'Sell', 'Help', 'Exit'],
         },
     ])
-        .then((answers) => {
+        .then(async (answers) => {
         switch (answers.choice) {
             case 'Buy':
-                utils_1.cls();
-                exports.shopBuyMenu(player);
+                (0, utils_1.cls)();
+                (0, exports.shopBuyMenu)(player);
                 break;
             case 'Sell':
                 if (player.inventory.filter((item) => item.type === 'Item').length > 0) {
-                    utils_1.cls();
-                    exports.shopSellMenu(player);
+                    (0, utils_1.cls)();
+                    (0, exports.shopSellMenu)(player);
                 }
                 else {
-                    utils_1.cls();
-                    logs_1.infoLog();
+                    (0, utils_1.cls)();
+                    (0, logs_1.infoLog)();
                     console.log(`Uh Oh. Looks like you don't have any items in your inventory, which means you can't sell anything.`);
-                    logs_1.infoLogEnd();
-                    exports.shopMenu(player);
+                    (0, logs_1.infoLogEnd)();
+                    (0, exports.shopMenu)(player);
                     return;
                 }
                 break;
             case 'Help':
-                utils_1.cls();
-                playerUtils_1.locationInfo(player);
+                (0, utils_1.cls)();
+                await (0, playerUtils_1.locationInfo)(player);
+                (0, exports.shopMenu)(player);
                 break;
             case 'Exit':
-                utils_1.cls();
+                (0, utils_1.cls)();
                 player.location = area_1.Area.CITY;
-                playMenu_1.playMenu(player);
+                (0, playMenu_1.playMenu)(player);
                 break;
         }
     });
 };
 exports.shopMenu = shopMenu;
-const shopCatalog = utils_1.randomItemsFromArr(player_1.allItems, 2);
+const shopCatalog = (0, utils_1.randomItemsFromArr)(player_1.allItems, 2);
 const _choices = shopCatalog.map((x) => x.name);
 _choices.push('Back');
 const shopBuyMenu = (player) => {
-    return inquirer
+    return inquirer_1.default
         .prompt([
         {
             type: 'list',
@@ -69,30 +73,30 @@ const shopBuyMenu = (player) => {
         let i = _choices.indexOf(answers.choice);
         switch (answers.choice) {
             case 'Back':
-                utils_1.cls();
-                exports.shopMenu(player);
+                (0, utils_1.cls)();
+                (0, exports.shopMenu)(player);
                 break;
             case shopCatalog[i].name:
-                utils_1.cls();
-                let confirmation = await confirmMenu_1.confirmMenu('sell this item');
+                (0, utils_1.cls)();
+                let confirmation = await (0, confirmMenu_1.confirmMenu)('sell this item');
                 if (confirmation) {
                     if (player.coins >= shopCatalog[i].value) {
                         player.coins -= shopCatalog[i].value;
                         player.inventory.push(shopCatalog[i]);
-                        logs_1.infoShopLog();
+                        (0, logs_1.infoShopLog)();
                         console.log(`You successfully bought ${shopCatalog[i].name}`);
-                        logs_1.infoLogEnd();
+                        (0, logs_1.infoLogEnd)();
                     }
                     else {
                         console.log(`You don't have enough money(${player.coins})`);
                     }
-                    exports.shopBuyMenu(player);
+                    (0, exports.shopBuyMenu)(player);
                 }
                 else {
-                    logs_1.infoLog();
+                    (0, logs_1.infoLog)();
                     console.log('You canceled this action!');
-                    logs_1.infoLogEnd();
-                    exports.shopBuyMenu(player);
+                    (0, logs_1.infoLogEnd)();
+                    (0, exports.shopBuyMenu)(player);
                 }
                 break;
         }
@@ -102,11 +106,11 @@ exports.shopBuyMenu = shopBuyMenu;
 const shopSellMenu = (player) => {
     let _choices = [];
     if (player.inventory.filter((item) => item.type === 'Item').length == 0) {
-        utils_1.cls();
-        logs_1.infoLog();
+        (0, utils_1.cls)();
+        (0, logs_1.infoLog)();
         console.log(`Uh Oh. Looks like you don't have any items in your inventory, which means you can't sell anything.`);
-        logs_1.infoLogEnd();
-        exports.shopMenu(player);
+        (0, logs_1.infoLogEnd)();
+        (0, exports.shopMenu)(player);
         return;
     }
     for (let i = 0; i < player.inventory.length; i++) {
@@ -115,7 +119,7 @@ const shopSellMenu = (player) => {
         }
     }
     _choices.push('Back');
-    return inquirer
+    return inquirer_1.default
         .prompt([
         {
             type: 'list',
@@ -131,24 +135,24 @@ const shopSellMenu = (player) => {
             .indexOf(answers.choice);
         switch (answers.choice) {
             case 'Back':
-                utils_1.cls();
-                exports.shopMenu(player);
+                (0, utils_1.cls)();
+                (0, exports.shopMenu)(player);
                 break;
             case _choices[i]:
-                let confirmation = await confirmMenu_1.confirmMenu('sell this item');
+                let confirmation = await (0, confirmMenu_1.confirmMenu)('sell this item');
                 if (confirmation) {
                     player.coins += Math.ceil(player.inventory[invIndex].value / 1.5);
-                    logs_1.infoLog();
+                    (0, logs_1.infoLog)();
                     console.log(`You successfully sold your ${_choices[i]}.`);
-                    logs_1.infoLogEnd();
+                    (0, logs_1.infoLogEnd)();
                     player.inventory.splice(invIndex, 1);
-                    exports.shopSellMenu(player);
+                    (0, exports.shopSellMenu)(player);
                 }
                 else {
-                    logs_1.infoLog();
+                    (0, logs_1.infoLog)();
                     console.log('You canceled this action');
-                    logs_1.infoLogEnd();
-                    exports.shopSellMenu(player);
+                    (0, logs_1.infoLogEnd)();
+                    (0, exports.shopSellMenu)(player);
                 }
                 break;
         }

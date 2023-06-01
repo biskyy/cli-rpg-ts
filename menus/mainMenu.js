@@ -18,16 +18,16 @@ const mainMenu = (player) => {
         .then((answers) => {
         switch (answers.choice) {
             case 'Play':
-                utils_1.cls();
-                playMenu_1.playMenu(player);
+                (0, utils_1.cls)();
+                (0, playMenu_1.playMenu)(player);
                 break;
             case 'Profile':
-                utils_1.cls();
-                playerUtils_1.profile(player);
-                exports.mainMenu(player);
+                (0, utils_1.cls)();
+                (0, playerUtils_1.profile)(player);
+                (0, exports.mainMenu)(player);
                 break;
             case 'Exit':
-                utils_1.cls();
+                (0, utils_1.cls)();
                 process.exit(0);
                 break;
             default:

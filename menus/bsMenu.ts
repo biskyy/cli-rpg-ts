@@ -1,4 +1,4 @@
-import { allEquipment, Player } from '../player/player';
+import { allEquipment, PlayerI } from '../player/player';
 import { cls, randomEquipmentFromArr } from '../helpers/utils';
 import { Sword } from '../items/swords';
 import { Armor } from '../items/armors';
@@ -12,7 +12,7 @@ import { changeArmor, changeSword, locationInfo } from '../player/playerUtils';
 
 const inquirer = require('inquirer');
 
-export const bsMenu = (player: Player) => {
+export const bsMenu = (player: PlayerI) => {
   return inquirer
     .prompt([
       {
@@ -22,7 +22,7 @@ export const bsMenu = (player: Player) => {
         choices: ['Buy', 'Sell', 'Help', 'Exit'],
       },
     ])
-    .then((answers) => {
+    .then(async (answers) => {
       switch (answers.choice) {
         case 'Exit':
           cls();
@@ -53,7 +53,7 @@ export const bsMenu = (player: Player) => {
           }
           break;
         case 'Help':
-          locationInfo(player);
+          await locationInfo(player);
           break;
       }
     });
@@ -63,7 +63,7 @@ const bsCatalog: (Armor | Sword)[] = randomEquipmentFromArr(allEquipment, 4);
 const _choices = bsCatalog.map((x) => x.name);
 _choices.push('Back');
 
-export const bsBuyMenu = (player: Player) => {
+export const bsBuyMenu = (player: PlayerI) => {
   cls();
   return inquirer
     .prompt([
@@ -107,7 +107,7 @@ export const bsBuyMenu = (player: Player) => {
     });
 };
 
-export const bsSellMenu = (player: Player) => {
+export const bsSellMenu = (player: PlayerI) => {
   let _choices = [];
 
   if (

@@ -43,9 +43,9 @@ const randomEquipmentFromArr = (arr, n) => {
 };
 exports.randomEquipmentFromArr = randomEquipmentFromArr;
 const throwErr = (details) => {
-    logs_1.infoLog();
+    (0, logs_1.infoLog)();
     console.log('Uh Oh. Something went wrong!');
     console.log(`Details: ${details}`);
-    logs_1.infoLogEnd();
+    (0, logs_1.infoLogEnd)();
 };
 exports.throwErr = throwErr;

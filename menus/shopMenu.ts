@@ -1,13 +1,13 @@
-const inquirer = require('inquirer');
+import inquirer from 'inquirer';
 import { infoLog, infoLogEnd, infoShopLog } from '../helpers/logs';
 import { cls, randomItemsFromArr } from '../helpers/utils';
 import { Area } from '../locations/area';
-import { allItems, Inventory, Player } from '../player/player';
+import { allItems, Inventory, PlayerI } from '../player/player';
 import { locationInfo } from '../player/playerUtils';
 import { confirmMenu } from './confirmMenu';
 import { playMenu } from './playMenu';
 
-export const shopMenu = (player: Player) => {
+export const shopMenu = async (player: PlayerI) => {
   return inquirer
     .prompt([
       {
@@ -17,7 +17,7 @@ export const shopMenu = (player: Player) => {
         choices: ['Buy', 'Sell', 'Help', 'Exit'],
       },
     ])
-    .then((answers) => {
+    .then(async (answers) => {
       switch (answers.choice) {
         case 'Buy':
           cls();
@@ -43,7 +43,8 @@ export const shopMenu = (player: Player) => {
           break;
         case 'Help':
           cls();
-          locationInfo(player);
+          await locationInfo(player);
+          shopMenu(player)
           break;
         case 'Exit':
           cls();
@@ -58,7 +59,7 @@ const shopCatalog: Inventory[] = randomItemsFromArr(allItems, 2);
 const _choices = shopCatalog.map((x) => x.name);
 _choices.push('Back');
 
-export const shopBuyMenu = (player: Player) => {
+export const shopBuyMenu = (player: PlayerI) => {
   return inquirer
     .prompt([
       {
@@ -101,7 +102,7 @@ export const shopBuyMenu = (player: Player) => {
     });
 };
 
-export const shopSellMenu = (player: Player) => {
+export const shopSellMenu = (player: PlayerI) => {
   let _choices = [];
 
   if (player.inventory.filter((item) => item.type === 'Item').length == 0) {

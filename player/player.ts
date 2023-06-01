@@ -40,7 +40,18 @@ export const changeMaxExp = (n: number) => {
   maxExp *= n;
 };
 
-export interface Player {
+export interface IEquipment {
+  sword: Sword;
+  armor: Armor;
+}
+
+export interface IStats {
+  monstersKilled: { name: string; count: number };
+  strength: { name: string; count: number };
+  treesChopped: { name: string; count: number };
+}
+
+export interface PlayerI {
   name: string;
   origin?: string;
   equipment: typeof equipment;
@@ -58,7 +69,54 @@ export interface Player {
   gameOver: boolean;
 }
 
-export const p1: Player = {
+class Player {
+  name: string;
+  origin?: string;
+  equipment: IEquipment;
+  inventory: Inventory[];
+  coins: number;
+  maxHp: number;
+  hp: number;
+  lvl: number;
+  exp: number;
+  attack: number;
+  defense: number;
+  location: string;
+  stats: IStats;
+  perks: Perk[];
+  gameOver: boolean;
+  constructor(
+    name: string,
+    equipment: IEquipment,
+    inventory: Inventory[],
+    coins: number,
+    maxHp: number,
+    hp: number,
+    lvl: number,
+    exp: number,
+    attack: number,
+    defense: number,
+    location: string,
+    stats: IStats,
+    perks: Perk[]
+  ) {
+    this.name = name;
+    this.equipment = equipment;
+    this.inventory = inventory;
+    this.coins = coins;
+    this.maxHp = maxHp;
+    this.hp = maxHp;
+    this.lvl = lvl;
+    this.exp = exp;
+    this.attack = attack;
+    this.defense = defense;
+    this.location = location;
+    this.stats = stats;
+    this.perks = perks;
+  }
+}
+
+export const p1:  Player = {
   name: 'Adventurer',
   equipment: equipment,
   inventory: inventory,

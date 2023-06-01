@@ -1,4 +1,4 @@
-import { infoLog, infoLogEnd } from '../helpers/logs';
+import { infoLog, infoLogEnd, typewriter } from '../helpers/logs';
 import { cls, throwErr } from '../helpers/utils';
 import { Armor } from '../items/armors';
 import { Sword } from '../items/swords';
@@ -8,12 +8,12 @@ import { Perk } from './perks';
 import {
   changeMaxExp,
   maxExp,
-  Player,
+  PlayerI,
   playerAttack,
   playerDefense,
 } from './player';
 
-export const profile = (player: Player) => {
+export const profile = (player: PlayerI) => {
   infoLog();
   console.log(`Name: ${player.name}`);
   console.log(`HP: ${player.hp}/${player.maxHp}`);
@@ -29,7 +29,7 @@ export const profile = (player: Player) => {
   infoLogEnd();
 };
 
-export const setupStats = (player: Player) => {
+export const setupStats = (player: PlayerI) => {
   player.attack = playerAttack;
   player.defense = playerDefense;
   player.attack +=
@@ -39,7 +39,7 @@ export const setupStats = (player: Player) => {
   player.defense += player.equipment.armor.defense + (player.lvl - 1);
 };
 
-export const inventory = (player: Player) => {
+export const inventory = (player: PlayerI) => {
   infoLog();
   for (let i = 0; i < player.inventory.length; i++) {
     if (player.inventory[i].type === 'noArmor') {
@@ -55,14 +55,14 @@ export const inventory = (player: Player) => {
   infoLogEnd();
 };
 
-export const locationInfo = (player: Player) => {
+export const locationInfo = async (player: PlayerI) => {
   switch (player.location) {
     case Area.CITY:
       cls();
       infoLog();
-      console.log('You are in your city.');
-      console.log('From here you can go to shop to get some new items.');
-      console.log(
+      await typewriter('You are in your city.');
+      await typewriter('From here you can go to shop to get some new items.');
+      await typewriter(
         'There is also the blacksmith from which you can buy new equipment!'
       );
       infoLogEnd();
@@ -70,38 +70,39 @@ export const locationInfo = (player: Player) => {
     case Area.FOREST:
       cls();
       infoLog();
-      console.log('You are in the forest near your city.');
-      console.log('Here you can go hunting monsters.');
-      console.log('By defeating monsters you can get coins and loot.');
+      await typewriter('You are in the forest near your city.');
+      await typewriter('Here you can go hunting monsters.');
+      await typewriter('By defeating monsters you can get coins and loot.');
       infoLogEnd();
       break;
     case City.HOME:
       cls();
       infoLog();
-      console.log('You are currently in your house.');
-      console.log(`Here you can eat to regenarate health,`);
-      console.log(
+      await typewriter('You are currently in your house.');
+      await typewriter(`Here you can eat to regenarate health,`);
+      await typewriter(
         `Or sleep when it's night time(sleeping will regenarate all your missing health).`
       );
       infoLogEnd();
+      break;
     case City.SHOP:
       infoLog();
-      console.log('You are currently in the shop from your city.');
-      console.log('From here you can either buy new items,');
-      console.log('or sell items from your inventory to get money');
+      await typewriter('You are currently in the shop from your city.');
+      await typewriter('From here you can either buy new items,');
+      await typewriter('or sell items from your inventory to get money');
       infoLogEnd();
       break;
     case City.BLACKSMITH:
       infoLog();
-      console.log('You are in currently in the blacksmith from your city');
-      console.log('From here you can either buy new equipment,');
-      console.log('or sell equipment from your inventory for money.');
+      await typewriter('You are in currently in the blacksmith from your city');
+      await typewriter('From here you can either buy new equipment,');
+      await typewriter('or sell equipment from your inventory for money.');
       infoLogEnd();
       break;
   }
 };
 
-export const changeSword = (player: Player, sword: Sword) => {
+export const changeSword = (player: PlayerI, sword: Sword) => {
   if (player.inventory.includes(sword)) {
     player.equipment.sword = sword;
     setupStats(player);
@@ -110,7 +111,7 @@ export const changeSword = (player: Player, sword: Sword) => {
   }
 };
 
-export const changeArmor = (player: Player, armor: Armor) => {
+export const changeArmor = (player: PlayerI, armor: Armor) => {
   if (player.inventory.includes(armor)) {
     player.equipment.armor = armor;
     setupStats(player);
@@ -119,7 +120,7 @@ export const changeArmor = (player: Player, armor: Armor) => {
   }
 };
 
-export const checkExp = (player: Player) => {
+export const checkExp = (player: PlayerI) => {
   if (player.exp > maxExp) {
     updateLvl(player);
   } else {
@@ -127,7 +128,7 @@ export const checkExp = (player: Player) => {
   }
 };
 
-const updateLvl = (player: Player) => {
+const updateLvl = (player: PlayerI) => {
   player.exp = 0;
   player.lvl += 1;
   changeMaxExp(1.2);
@@ -139,7 +140,7 @@ const updateLvl = (player: Player) => {
   setupStats(player);
 };
 
-export const checkPlayerDead = (player: Player) => {
+export const checkPlayerDead = (player: PlayerI) => {
   if (player.hp <= 0) {
     return true;
   } else {
@@ -147,13 +148,13 @@ export const checkPlayerDead = (player: Player) => {
   }
 };
 
-export const stats = (player: Player) => {
+export const stats = (player: PlayerI) => {
   for (let i in player.stats) {
     console.log(`${player.stats[i].name}: ${player.stats[i].count}`);
   }
 };
 
-export const perks = (player: Player) => {
+export const perks = (player: PlayerI) => {
   if (player.perks.length > 0) {
     for (let i = 0; i < player.perks.length; i++) {
       console.log(player.perks[i]);
@@ -165,13 +166,13 @@ export const perks = (player: Player) => {
   }
 };
 
-export const newPerkInfo = (player: Player, perk: Perk) => {
+export const newPerkInfo = (player: PlayerI, perk: Perk) => {
   infoLog();
   console.log(`Congratulations! You have earned a new perk: ${perk}`);
   infoLogEnd();
 };
 
-export const checkHunterPerk = (player: Player) => {
+export const checkHunterPerk = (player: PlayerI) => {
   if (player.stats.monstersKilled.count >= 50) {
     player.perks.push(Perk.HUNTER);
     newPerkInfo(player, Perk.HUNTER);

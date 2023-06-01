@@ -1,12 +1,12 @@
 const inquirer = require('inquirer');
-import { Player, eat, sleep } from '../player/player';
+import { PlayerI, eat, sleep } from '../player/player';
 import { cls } from '../helpers/utils';
 import { infoLog, infoLogEnd } from '../helpers/logs';
 import { Area } from '../locations/area';
 import { playMenu } from './playMenu';
 import { locationInfo } from '../player/playerUtils';
 
-export const homeMenu = (player: Player) => {
+export const homeMenu = (player: PlayerI) => {
   return inquirer
     .prompt([
       {
@@ -16,7 +16,7 @@ export const homeMenu = (player: Player) => {
         choices: ['Eat', 'Sleep', 'Help', 'Exit'],
       },
     ])
-    .then((answers) => {
+    .then(async (answers) => {
       switch (answers.choice) {
         case 'Eat':
           cls();
@@ -30,7 +30,7 @@ export const homeMenu = (player: Player) => {
           break;
         case 'Help':
           cls();
-          locationInfo(player);
+          await locationInfo(player);
           homeMenu(player);
           break;
         case 'Exit':
