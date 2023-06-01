@@ -1,15 +1,16 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.homeMenu = void 0;
-const inquirer = require('inquirer');
-const player_1 = require("../player/player");
+const inquirer_1 = __importDefault(require("inquirer"));
 const utils_1 = require("../helpers/utils");
 const logs_1 = require("../helpers/logs");
 const area_1 = require("../locations/area");
 const playMenu_1 = require("./playMenu");
-const playerUtils_1 = require("../player/playerUtils");
 const homeMenu = (player) => {
-    return inquirer
+    return inquirer_1.default
         .prompt([
         {
             type: 'list',
@@ -22,17 +23,17 @@ const homeMenu = (player) => {
         switch (answers.choice) {
             case 'Eat':
                 (0, utils_1.cls)();
-                (0, player_1.eat)(player);
+                player.eat(20);
                 (0, exports.homeMenu)(player);
                 break;
             case 'Sleep':
                 (0, utils_1.cls)();
-                (0, player_1.sleep)(player);
+                player.sleep();
                 (0, exports.homeMenu)(player);
                 break;
             case 'Help':
                 (0, utils_1.cls)();
-                await (0, playerUtils_1.locationInfo)(player);
+                await player.locationInfo();
                 (0, exports.homeMenu)(player);
                 break;
             case 'Exit':

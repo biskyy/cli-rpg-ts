@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bsSellMenu = exports.bsBuyMenu = exports.bsMenu = void 0;
 const player_1 = require("../player/player");
@@ -8,10 +11,9 @@ const playMenu_1 = require("./playMenu");
 const area_1 = require("../locations/area");
 const confirmMenu_1 = require("./confirmMenu");
 const noItem_1 = require("../items/noItem");
-const playerUtils_1 = require("../player/playerUtils");
-const inquirer = require('inquirer');
+const inquirer_1 = __importDefault(require("inquirer"));
 const bsMenu = (player) => {
-    return inquirer
+    return inquirer_1.default
         .prompt([
         {
             type: 'list',
@@ -48,7 +50,7 @@ const bsMenu = (player) => {
                 }
                 break;
             case 'Help':
-                await (0, playerUtils_1.locationInfo)(player);
+                await player.locationInfo();
                 break;
         }
     });
@@ -59,7 +61,7 @@ const _choices = bsCatalog.map((x) => x.name);
 _choices.push('Back');
 const bsBuyMenu = (player) => {
     (0, utils_1.cls)();
-    return inquirer
+    return inquirer_1.default
         .prompt([
         {
             type: 'list',
@@ -121,7 +123,7 @@ const bsSellMenu = (player) => {
         }
     }
     _choices.push('Back');
-    return inquirer
+    return inquirer_1.default
         .prompt([
         {
             type: 'list',
@@ -151,7 +153,7 @@ const bsSellMenu = (player) => {
                         let _confirmation = await (0, confirmMenu_1.confirmMenu)('you want to continue');
                         if (_confirmation) {
                             player.inventory.push(noItem_1.noSword);
-                            (0, playerUtils_1.changeSword)(player, noItem_1.noSword);
+                            player.changeSword(noItem_1.noSword);
                         }
                         else {
                             (0, utils_1.cls)();
@@ -170,7 +172,7 @@ const bsSellMenu = (player) => {
                         let _confirmation = await (0, confirmMenu_1.confirmMenu)('you want to continue');
                         if (_confirmation) {
                             player.inventory.push(noItem_1.noArmor);
-                            (0, playerUtils_1.changeArmor)(player, noItem_1.noArmor);
+                            player.changeArmor(noItem_1.noArmor);
                         }
                         else {
                             (0, utils_1.cls)();

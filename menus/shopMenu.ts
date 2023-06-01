@@ -2,12 +2,11 @@ import inquirer from 'inquirer';
 import { infoLog, infoLogEnd, infoShopLog } from '../helpers/logs';
 import { cls, randomItemsFromArr } from '../helpers/utils';
 import { Area } from '../locations/area';
-import { allItems, Inventory, PlayerI } from '../player/player';
-import { locationInfo } from '../player/playerUtils';
+import { allItems, Inventory, Player } from '../player/player';
 import { confirmMenu } from './confirmMenu';
 import { playMenu } from './playMenu';
 
-export const shopMenu = async (player: PlayerI) => {
+export const shopMenu = async (player: Player) => {
   return inquirer
     .prompt([
       {
@@ -43,8 +42,8 @@ export const shopMenu = async (player: PlayerI) => {
           break;
         case 'Help':
           cls();
-          await locationInfo(player);
-          shopMenu(player)
+          await player.locationInfo();
+          shopMenu(player);
           break;
         case 'Exit':
           cls();
@@ -59,7 +58,7 @@ const shopCatalog: Inventory[] = randomItemsFromArr(allItems, 2);
 const _choices = shopCatalog.map((x) => x.name);
 _choices.push('Back');
 
-export const shopBuyMenu = (player: PlayerI) => {
+export const shopBuyMenu = (player: Player) => {
   return inquirer
     .prompt([
       {
@@ -79,7 +78,7 @@ export const shopBuyMenu = (player: PlayerI) => {
           break;
         case shopCatalog[i].name:
           cls();
-          let confirmation = await confirmMenu('sell this item');
+          let confirmation = await confirmMenu('buy this item');
           if (confirmation) {
             if (player.coins >= shopCatalog[i].value) {
               player.coins -= shopCatalog[i].value;
@@ -102,7 +101,7 @@ export const shopBuyMenu = (player: PlayerI) => {
     });
 };
 
-export const shopSellMenu = (player: PlayerI) => {
+export const shopSellMenu = (player: Player) => {
   let _choices = [];
 
   if (player.inventory.filter((item) => item.type === 'Item').length == 0) {

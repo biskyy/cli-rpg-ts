@@ -1,8 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.playMenu = void 0;
-const inquirer = require('inquirer');
-const player_1 = require("../player/player");
+const inquirer_1 = __importDefault(require("inquirer"));
 const area_1 = require("../locations/area");
 const city_1 = require("../locations/city");
 const mainMenu_1 = require("./mainMenu");
@@ -12,7 +14,6 @@ const homeMenu_1 = require("./homeMenu");
 const utils_1 = require("../helpers/utils");
 const monsters_1 = require("../monsters");
 const bsMenu_1 = require("./bsMenu");
-const playerUtils_1 = require("../player/playerUtils");
 const playerMenu_1 = require("./playerMenu");
 const playMenu = (player) => {
     let _choices;
@@ -34,7 +35,7 @@ const playMenu = (player) => {
         default:
             break;
     }
-    return inquirer
+    return inquirer_1.default
         .prompt([
         {
             type: 'list',
@@ -48,11 +49,11 @@ const playMenu = (player) => {
         switch (answers.choice) {
             case 'Help':
                 (0, utils_1.cls)();
-                await (0, playerUtils_1.locationInfo)(player);
+                await player.locationInfo();
                 (0, exports.playMenu)(player);
                 break;
             case 'Hunt':
-                (0, player_1.hunt)(player, monsters_1.monsters);
+                player.hunt(monsters_1.monsters);
                 (0, exports.playMenu)(player);
                 break;
             case 'Shop':

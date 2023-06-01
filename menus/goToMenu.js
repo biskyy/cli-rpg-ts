@@ -1,7 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.goToMenu = void 0;
-const inquirer = require('inquirer');
+const inquirer_1 = __importDefault(require("inquirer"));
 const area_1 = require("../locations/area");
 const utils_1 = require("../helpers/utils");
 const logs_1 = require("../helpers/logs");
@@ -10,7 +13,7 @@ const goToMenu = (player) => {
     let _choices = Object.values(area_1.Area);
     let index = _choices.indexOf(player.location);
     _choices.splice(index, 1);
-    return inquirer
+    return inquirer_1.default
         .prompt([
         {
             type: 'list',

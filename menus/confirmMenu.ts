@@ -1,5 +1,4 @@
-const inquirer = require('inquirer')
-
+import inquirer from 'inquirer';
 export const confirmMenu = async (str: string) => {
   let confirmation: boolean;
 

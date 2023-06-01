@@ -9,7 +9,6 @@ const logs_1 = require("../helpers/logs");
 const utils_1 = require("../helpers/utils");
 const area_1 = require("../locations/area");
 const player_1 = require("../player/player");
-const playerUtils_1 = require("../player/playerUtils");
 const confirmMenu_1 = require("./confirmMenu");
 const playMenu_1 = require("./playMenu");
 const shopMenu = async (player) => {
@@ -44,7 +43,7 @@ const shopMenu = async (player) => {
                 break;
             case 'Help':
                 (0, utils_1.cls)();
-                await (0, playerUtils_1.locationInfo)(player);
+                await player.locationInfo();
                 (0, exports.shopMenu)(player);
                 break;
             case 'Exit':

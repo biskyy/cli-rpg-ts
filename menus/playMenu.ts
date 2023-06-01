@@ -1,5 +1,5 @@
-const inquirer = require('inquirer');
-import { PlayerI, hunt } from '../player/player';
+import inquirer from 'inquirer';
+import { Player } from '../player/player';
 import { Area } from '../locations/area';
 import { City } from '../locations/city';
 import { mainMenu } from './mainMenu';
@@ -9,10 +9,9 @@ import { homeMenu } from './homeMenu';
 import { cls } from '../helpers/utils';
 import { monsters } from '../monsters';
 import { bsMenu } from './bsMenu';
-import { locationInfo, profile, inventory } from '../player/playerUtils';
 import { playerMenu } from './playerMenu';
 
-export const playMenu = (player: PlayerI) => {
+export const playMenu = (player: Player) => {
   let _choices;
 
   switch (player.location) {
@@ -50,11 +49,11 @@ export const playMenu = (player: PlayerI) => {
       switch (answers.choice) {
         case 'Help':
           cls();
-          await locationInfo(player);
+          await player.locationInfo();
           playMenu(player);
           break;
         case 'Hunt':
-          hunt(player, monsters);
+          player.hunt(monsters);
           playMenu(player);
           break;
         case 'Shop':

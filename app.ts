@@ -1,17 +1,14 @@
-import { typewriter } from './helpers/logs';
 import { cls } from './helpers/utils';
 import { mainMenu } from './menus/mainMenu';
-import { p1, PlayerI } from './player/player';
-import { setupStats } from './player/playerUtils';
+import { p1, Player } from './player/player';
 
-const input = async (player: PlayerI) => {
+const input = async (player: Player) => {
   let _input = await mainMenu(player);
   return _input;
 };
 
-const main = async (player: PlayerI) => {
+const main = async (player: Player) => {
   cls();
-  setupStats(player);
   await input(player);
 };
 

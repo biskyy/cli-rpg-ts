@@ -1,4 +1,4 @@
-import { allEquipment, PlayerI } from '../player/player';
+import { allEquipment, Player } from '../player/player';
 import { cls, randomEquipmentFromArr } from '../helpers/utils';
 import { Sword } from '../items/swords';
 import { Armor } from '../items/armors';
@@ -8,11 +8,10 @@ import { Area } from '../locations/area';
 import { shopMenu } from './shopMenu';
 import { confirmMenu } from './confirmMenu';
 import { noArmor, noSword } from '../items/noItem';
-import { changeArmor, changeSword, locationInfo } from '../player/playerUtils';
 
-const inquirer = require('inquirer');
+import inquirer from 'inquirer';
 
-export const bsMenu = (player: PlayerI) => {
+export const bsMenu = (player: Player) => {
   return inquirer
     .prompt([
       {
@@ -53,7 +52,7 @@ export const bsMenu = (player: PlayerI) => {
           }
           break;
         case 'Help':
-          await locationInfo(player);
+          await player.locationInfo();
           break;
       }
     });
@@ -63,7 +62,7 @@ const bsCatalog: (Armor | Sword)[] = randomEquipmentFromArr(allEquipment, 4);
 const _choices = bsCatalog.map((x) => x.name);
 _choices.push('Back');
 
-export const bsBuyMenu = (player: PlayerI) => {
+export const bsBuyMenu = (player: Player) => {
   cls();
   return inquirer
     .prompt([
@@ -107,7 +106,7 @@ export const bsBuyMenu = (player: PlayerI) => {
     });
 };
 
-export const bsSellMenu = (player: PlayerI) => {
+export const bsSellMenu = (player: Player) => {
   let _choices = [];
 
   if (
@@ -170,7 +169,7 @@ export const bsSellMenu = (player: PlayerI) => {
               let _confirmation = await confirmMenu('you want to continue');
               if (_confirmation) {
                 player.inventory.push(noSword);
-                changeSword(player, noSword);
+                player.changeSword(noSword);
               } else {
                 cls();
                 infoLog();
@@ -191,7 +190,7 @@ export const bsSellMenu = (player: PlayerI) => {
               let _confirmation = await confirmMenu('you want to continue');
               if (_confirmation) {
                 player.inventory.push(noArmor);
-                changeArmor(player, noArmor);
+                player.changeArmor(noArmor);
               } else {
                 cls();
                 infoLog();

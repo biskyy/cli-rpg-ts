@@ -1,4 +1,4 @@
-const inquirer = require('inquirer');
+import inquirer from 'inquirer';
 import { Area } from '../locations/area';
 import { cls } from '../helpers/utils';
 import { infoLog, infoLogEnd } from '../helpers/logs';

@@ -1,12 +1,14 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mainMenu = void 0;
-const inquirer = require('inquirer');
+const inquirer_1 = __importDefault(require("inquirer"));
 const utils_1 = require("../helpers/utils");
 const playMenu_1 = require("./playMenu");
-const playerUtils_1 = require("../player/playerUtils");
-const mainMenu = (player) => {
-    return inquirer
+const mainMenu = async (player) => {
+    return inquirer_1.default
         .prompt([
         {
             type: 'list',
@@ -23,7 +25,7 @@ const mainMenu = (player) => {
                 break;
             case 'Profile':
                 (0, utils_1.cls)();
-                (0, playerUtils_1.profile)(player);
+                player.profile();
                 (0, exports.mainMenu)(player);
                 break;
             case 'Exit':

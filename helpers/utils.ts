@@ -1,6 +1,5 @@
 import { Sword } from '../items/swords';
 import { Armor } from '../items/armors';
-import { Item } from '../items/items';
 import { Inventory } from '../player/player';
 import { infoLog, infoLogEnd } from './logs';
 

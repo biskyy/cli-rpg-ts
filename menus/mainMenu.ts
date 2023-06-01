@@ -1,10 +1,9 @@
-const inquirer = require('inquirer');
+import inquirer from 'inquirer';
 import { Player } from '../player/player';
 import { cls } from '../helpers/utils';
 import { playMenu } from './playMenu';
-import { profile } from '../player/playerUtils';
 
-export const mainMenu = (player: Player) => {
+export const mainMenu = async (player: Player) => {
   return inquirer
     .prompt([
       {
@@ -23,7 +22,7 @@ export const mainMenu = (player: Player) => {
 
         case 'Profile':
           cls();
-          profile(player);
+          player.profile();
           mainMenu(player);
           break;
 

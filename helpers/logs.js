@@ -20,13 +20,11 @@ exports.infoLogEnd = infoLogEnd;
 const typewriter = (text, delay) => {
     return new Promise((resolve) => {
         let index = 0;
-        let output = '';
         const type = () => {
             if (index < text.length) {
-                output += text.charAt(index);
                 process.stdout.write(text.charAt(index));
                 index++;
-                setTimeout(type, delay ? delay : 35);
+                setTimeout(type, delay ? delay : 30);
             }
             else {
                 process.stdout.write('\n');
