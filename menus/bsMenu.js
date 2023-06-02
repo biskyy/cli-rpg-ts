@@ -10,7 +10,6 @@ const logs_1 = require("../helpers/logs");
 const playMenu_1 = require("./playMenu");
 const area_1 = require("../locations/area");
 const confirmMenu_1 = require("./confirmMenu");
-const noItem_1 = require("../items/noItem");
 const inquirer_1 = __importDefault(require("inquirer"));
 const bsMenu = (player) => {
     return inquirer_1.default
@@ -152,8 +151,7 @@ const bsSellMenu = (player) => {
                         (0, logs_1.infoLogEnd)();
                         let _confirmation = await (0, confirmMenu_1.confirmMenu)('you want to continue');
                         if (_confirmation) {
-                            player.inventory.push(noItem_1.noSword);
-                            player.changeSword(noItem_1.noSword);
+                            player.changeSword(null);
                         }
                         else {
                             (0, utils_1.cls)();
@@ -171,8 +169,7 @@ const bsSellMenu = (player) => {
                         (0, logs_1.infoLogEnd)();
                         let _confirmation = await (0, confirmMenu_1.confirmMenu)('you want to continue');
                         if (_confirmation) {
-                            player.inventory.push(noItem_1.noArmor);
-                            player.changeArmor(noItem_1.noArmor);
+                            player.changeArmor(null);
                         }
                         else {
                             (0, utils_1.cls)();

@@ -11,7 +11,7 @@ export const infoShopLog = () => {
 };
 
 export const infoLogEnd = () => {
-  console.log('----------------------------\n');
+  console.log('----------------------------');
 };
 export const typewriter = (text: string, delay?: number) => {
   return new Promise((resolve) => {

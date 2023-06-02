@@ -12,7 +12,7 @@ const goToMenu_1 = require("./goToMenu");
 const shopMenu_1 = require("./shopMenu");
 const homeMenu_1 = require("./homeMenu");
 const utils_1 = require("../helpers/utils");
-const monsters_1 = require("../monsters");
+const monsters_1 = require("../npcs/monsters");
 const bsMenu_1 = require("./bsMenu");
 const playerMenu_1 = require("./playerMenu");
 const playMenu = (player) => {
@@ -53,7 +53,7 @@ const playMenu = (player) => {
                 (0, exports.playMenu)(player);
                 break;
             case 'Hunt':
-                player.hunt(monsters_1.monsters);
+                player.hunt(Object.values(monsters_1.monsters));
                 (0, exports.playMenu)(player);
                 break;
             case 'Shop':

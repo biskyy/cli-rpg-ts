@@ -21,7 +21,7 @@ const playerMenu = (player) => {
         switch (answers.choice) {
             case 'Profile':
                 (0, utils_1.cls)();
-                player.profile();
+                player.printProfile();
                 (0, exports.playerMenu)(player);
                 break;
             case 'Inventory':

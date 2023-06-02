@@ -7,7 +7,7 @@ import { goToMenu } from './goToMenu';
 import { shopMenu } from './shopMenu';
 import { homeMenu } from './homeMenu';
 import { cls } from '../helpers/utils';
-import { monsters } from '../monsters';
+import { monsters } from '../npcs/monsters';
 import { bsMenu } from './bsMenu';
 import { playerMenu } from './playerMenu';
 
@@ -53,7 +53,7 @@ export const playMenu = (player: Player) => {
           playMenu(player);
           break;
         case 'Hunt':
-          player.hunt(monsters);
+          player.hunt(Object.values(monsters));
           playMenu(player);
           break;
         case 'Shop':

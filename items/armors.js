@@ -1,27 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SteelArmor = exports.IronArmor = exports.CooperArmor = exports.ClothArmor = void 0;
-exports.ClothArmor = {
-    type: 'Armor',
-    name: 'Cloth Armor',
-    defense: 1,
-    value: 70,
-};
-exports.CooperArmor = {
-    type: 'Armor',
-    name: 'Cooper Armor',
-    defense: 5,
-    value: 250,
-};
-exports.IronArmor = {
-    type: 'Armor',
-    name: 'Iron Armor',
-    defense: 12,
-    value: 520,
-};
-exports.SteelArmor = {
-    type: 'Armor',
-    name: 'Steel Armor',
-    defense: 16,
-    value: 700,
+exports.armors = exports.Armor = void 0;
+const items_1 = require("./items");
+class Armor extends items_1.Item {
+    defensePower;
+    constructor(type, name, desc, value, defensePower) {
+        super(type, name, desc, value);
+        this.defensePower = defensePower;
+    }
+}
+exports.Armor = Armor;
+exports.armors = {
+    ClothArmor: new Armor(items_1.ItemType.ARMOR, 'Cloth Armor', 'Some basic armor for surving some of the very early game', 70, 1),
+    CooperArmor: new Armor(items_1.ItemType.ARMOR, 'Cooper Armor', 'The upgrade', 250, 5),
+    IronArmor: new Armor(items_1.ItemType.ARMOR, 'Iron Armor', 'Mid', 520, 12),
+    SteelArmor: new Armor(items_1.ItemType.ARMOR, 'Steel Armor', 'Why not', 700, 22),
 };

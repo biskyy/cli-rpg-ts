@@ -25,7 +25,7 @@ const mainMenu = async (player) => {
                 break;
             case 'Profile':
                 (0, utils_1.cls)();
-                player.profile();
+                player.printProfile();
                 (0, exports.mainMenu)(player);
                 break;
             case 'Exit':

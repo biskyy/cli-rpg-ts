@@ -1,42 +1,21 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.p1 = exports.Player = exports.armors = exports.allEquipment = exports.allItems = exports.inventory = void 0;
+exports.p1 = exports.Player = exports.allEquipment = exports.allItems = exports.inventory = void 0;
 const logs_1 = require("../helpers/logs");
 const utils_1 = require("../helpers/utils");
-const armor = __importStar(require("../items/armors"));
-const item = __importStar(require("../items/items"));
-const noItem_1 = require("../items/noItem");
-const sword = __importStar(require("../items/swords"));
+const items_1 = require("../items/items");
+const armors_1 = require("../items/armors");
+const swords_1 = require("../items/swords");
+// import { noArmor, noSword } from '../items/noItem';
 const area_1 = require("../locations/area");
 const city_1 = require("../locations/city");
 const perks_1 = require("./perks");
-exports.inventory = [item.testItem];
-exports.allItems = Object.values(item);
-exports.allEquipment = Object.values(sword);
-exports.armors = Object.values(armor);
+exports.inventory = [items_1.items.testItem];
+exports.allItems = Object.values(items_1.items);
+exports.allEquipment = Object.values({
+    ...armors_1.armors,
+    ...swords_1.swords,
+});
 class Player {
     name;
     origin;
@@ -96,28 +75,22 @@ class Player {
         return;
     };
     attack = (monster) => {
-        let pDamage = Math.ceil(this.attackPower * (100 / (100 + monster.defense)));
-        let eDamage = Math.ceil(monster.attack * (100 / (100 + this.defensePower)));
-        monster.hp -= pDamage;
-        this.hp -= eDamage;
-        monster.hp = Math.max(0, monster.hp);
-        this.hp = Math.max(0, this.hp);
-        (0, logs_1.infoHuntLog)();
-        console.log('You did ' + pDamage + ' damage to a ' + monster.name.toLowerCase());
-        console.log('The ' + monster.name.toLowerCase() + ' did ' + eDamage + ' damage to you');
-        (0, logs_1.infoLogEnd)();
+        let pDamage = Math.ceil(// damage calc for player
+        ((this.equipment.sword != null ? this.equipment.sword.attackPower : 0) +
+            this.attackPower) *
+            (100 / (100 + monster.defensePower)));
+        monster.hp -= pDamage; // subtract hp from monster
+        monster.hp = Math.max(0, monster.hp); // round the hp of the monster
+        console.log('You did ' + pDamage + ' damage to a ' + monster.name.toLowerCase() // log the action
+        );
     };
     battle = (monster) => {
+        (0, logs_1.infoHuntLog)();
         while (true) {
             this.attack(monster);
-            (0, utils_1.timeSleep)(1500);
-            if (this.checkPlayerDead()) {
-                (0, logs_1.infoLog)();
-                console.log(`Uh Oh! Looks like you died to a ${monster.name}!`);
+            (0, utils_1.timeSleep)(400);
+            if (monster.hp <= 0) { // check monster dead
                 (0, logs_1.infoLogEnd)();
-                break;
-            }
-            if (monster.hp <= 0) {
                 (0, logs_1.infoLog)();
                 console.log(`You found and killed a ${monster.name.toLowerCase()}.`);
                 console.log(`You have ${this.hp} hp remaining!`);
@@ -131,6 +104,15 @@ class Player {
                 this.checkExp();
                 break;
             }
+            monster.attack(this);
+            (0, logs_1.infoLogEnd)();
+            if (this.checkPlayerDead()) { // check player dead
+                (0, logs_1.infoLog)();
+                console.log(`Uh Oh! Looks like you died to a ${monster.name}!`);
+                (0, logs_1.infoLogEnd)();
+                break;
+            }
+            (0, utils_1.timeSleep)(1500);
         }
     };
     hunt = (arr) => {
@@ -153,7 +135,7 @@ class Player {
         (0, logs_1.infoLogEnd)();
         return;
     };
-    profile = () => {
+    printProfile = () => {
         (0, logs_1.infoLog)();
         console.log(`Name: ${this.name}`);
         console.log(`HP: ${this.hp}/${this.maxHp}`);
@@ -164,26 +146,19 @@ class Player {
         console.log(`Coins: ${this.coins}`);
         console.log(`Location: ${this.location}\n`);
         console.log(`Equipment:`);
-        console.log(`-Sword: ${this.equipment.sword.name}`);
-        console.log(`-Armor: ${this.equipment.armor.name}`);
+        console.log(`-Sword: ${this.equipment.sword != null
+            ? this.equipment.sword.name
+            : 'No sword equipped'}`);
+        console.log(`-Armor: ${this.equipment.armor != null
+            ? this.equipment.armor.name
+            : 'No armor equipped'}`);
         (0, logs_1.infoLogEnd)();
     };
-    // setupStats = () => {
-    //   this.attackPower = th;
-    //   this.defensePower = playerDefense;
-    //   this.attackPower +=
-    //     this.equipment.sword.attackPower +
-    //     (this.lvl - 1) +
-    //     this.miscStats.strength.count;
-    //   this.defensePower += this.equipment.armor.defensePower + (this.lvl - 1);
-    // };
     printInventory = () => {
         (0, logs_1.infoLog)();
         for (let i = 0; i < this.inventory.length; i++) {
-            if (this.inventory[i].type === 'noArmor') {
-                continue;
-            }
-            if (this.inventory[i].type === 'noSword') {
+            if (this.inventory[i].type === items_1.ItemType.NOARMOR ||
+                this.inventory[i].type === items_1.ItemType.NOSWORD) {
                 continue;
             }
             console.log(`${i + 1}. ${this.inventory[i].name}`);
@@ -303,9 +278,9 @@ class Player {
 }
 exports.Player = Player;
 exports.p1 = new Player('Adventurer', {
-    sword: noItem_1.noSword,
-    armor: noItem_1.noArmor,
-}, [item.testItem], 500, 100, 100, 1, 100, 0, 10, 5, area_1.Area.CITY, {
+    sword: null,
+    armor: null,
+}, [items_1.items.testItem], 500, 100, 100, 1, 100, 0, 10, 5, area_1.Area.CITY, {
     monstersKilled: { name: 'Monsters killed', count: 0 },
     strength: { name: 'Strength', count: 0 },
     treesChopped: { name: 'Trees chopped', count: 0 },

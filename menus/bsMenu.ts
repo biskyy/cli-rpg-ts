@@ -7,7 +7,6 @@ import { playMenu } from './playMenu';
 import { Area } from '../locations/area';
 import { shopMenu } from './shopMenu';
 import { confirmMenu } from './confirmMenu';
-import { noArmor, noSword } from '../items/noItem';
 
 import inquirer from 'inquirer';
 
@@ -168,8 +167,7 @@ export const bsSellMenu = (player: Player) => {
               infoLogEnd();
               let _confirmation = await confirmMenu('you want to continue');
               if (_confirmation) {
-                player.inventory.push(noSword);
-                player.changeSword(noSword);
+                player.changeSword(null);
               } else {
                 cls();
                 infoLog();
@@ -189,8 +187,7 @@ export const bsSellMenu = (player: Player) => {
               infoLogEnd();
               let _confirmation = await confirmMenu('you want to continue');
               if (_confirmation) {
-                player.inventory.push(noArmor);
-                player.changeArmor(noArmor);
+                player.changeArmor(null);
               } else {
                 cls();
                 infoLog();

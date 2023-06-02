@@ -77,7 +77,7 @@ const shopBuyMenu = (player) => {
                 break;
             case shopCatalog[i].name:
                 (0, utils_1.cls)();
-                let confirmation = await (0, confirmMenu_1.confirmMenu)('sell this item');
+                let confirmation = await (0, confirmMenu_1.confirmMenu)('buy this item');
                 if (confirmation) {
                     if (player.coins >= shopCatalog[i].value) {
                         player.coins -= shopCatalog[i].value;

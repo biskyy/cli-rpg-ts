@@ -3,10 +3,10 @@ import { cls, randomFromArr, throwErr, timeSleep } from '../helpers/utils';
 import { Item, ItemType, items } from '../items/items';
 import { Armor, armors } from '../items/armors';
 import { Sword, swords } from '../items/swords';
-import { noArmor, noSword } from '../items/noItem';
+// import { noArmor, noSword } from '../items/noItem';
 import { Area } from '../locations/area';
 import { City } from '../locations/city';
-import { Monster } from '../monsters';
+import { Monster } from '../npcs/monsters';
 import { Perk } from './perks';
 
 export type Inventory = Armor | Sword | Item;
@@ -19,8 +19,8 @@ export let allEquipment: (Sword | Armor)[] = Object.values({
 });
 
 export interface IEquipment {
-  sword: Sword;
-  armor: Armor;
+  sword: Sword | null;
+  armor: Armor | null;
 }
 
 export interface IMiscStats {
@@ -81,7 +81,7 @@ export class Player {
   changeMaxExp = (n: number) => {
     this.maxExp *= n;
   };
-  eat = (eatValue) => {
+  eat = (eatValue: number) => {
     if (this.hp >= this.maxHp) {
       this.hp = this.maxHp;
       infoLog();
@@ -105,38 +105,29 @@ export class Player {
     return;
   };
   attack = (monster: Monster): void => {
-    let pDamage = Math.ceil(this.attackPower * (100 / (100 + monster.defense)));
-    let eDamage = Math.ceil(monster.attack * (100 / (100 + this.defensePower)));
-
-    monster.hp -= pDamage;
-    this.hp -= eDamage;
-
-    monster.hp = Math.max(0, monster.hp);
-    this.hp = Math.max(0, this.hp);
-
-    infoHuntLog();
-    console.log(
-      'You did ' + pDamage + ' damage to a ' + monster.name.toLowerCase()
+    let pDamage = Math.ceil( // damage calc for player
+      ((this.equipment.sword != null ? this.equipment.sword.attackPower : 0) +
+        this.attackPower) *
+        (100 / (100 + monster.defensePower))
     );
+
+    monster.hp -= pDamage; // subtract hp from monster
+
+    monster.hp = Math.max(0, monster.hp); // round the hp of the monster
+
     console.log(
-      'The ' + monster.name.toLowerCase() + ' did ' + eDamage + ' damage to you'
+      'You did ' + pDamage + ' damage to a ' + monster.name.toLowerCase() // log the action
     );
-    infoLogEnd();
   };
   battle = (monster: Monster) => {
+    infoHuntLog()
     while (true) {
+
       this.attack(monster);
+      timeSleep(400)
 
-      timeSleep(1500);
-
-      if (this.checkPlayerDead()) {
-        infoLog();
-        console.log(`Uh Oh! Looks like you died to a ${monster.name}!`);
-        infoLogEnd();
-        break;
-      }
-
-      if (monster.hp <= 0) {
+      if (monster.hp <= 0) { // check monster dead
+        infoLogEnd()
         infoLog();
         console.log(`You found and killed a ${monster.name.toLowerCase()}.`);
         console.log(`You have ${this.hp} hp remaining!`);
@@ -152,6 +143,19 @@ export class Player {
 
         break;
       }
+
+      monster.attack(this)
+      infoLogEnd()
+
+      
+      if (this.checkPlayerDead()) { // check player dead
+        infoLog();
+        console.log(`Uh Oh! Looks like you died to a ${monster.name}!`);
+        infoLogEnd();
+        break;
+      }
+      
+      timeSleep(1500);
     }
   };
   hunt = (arr: Monster[]) => {
@@ -178,7 +182,7 @@ export class Player {
     infoLogEnd();
     return;
   };
-  profile = () => {
+  printProfile = () => {
     infoLog();
     console.log(`Name: ${this.name}`);
     console.log(`HP: ${this.hp}/${this.maxHp}`);
@@ -189,20 +193,22 @@ export class Player {
     console.log(`Coins: ${this.coins}`);
     console.log(`Location: ${this.location}\n`);
     console.log(`Equipment:`);
-    console.log(`-Sword: ${this.equipment.sword.name}`);
-    console.log(`-Armor: ${this.equipment.armor.name}`);
+    console.log(
+      `-Sword: ${
+        this.equipment.sword != null
+          ? this.equipment.sword.name
+          : 'No sword equipped'
+      }`
+    );
+    console.log(
+      `-Armor: ${
+        this.equipment.armor != null
+          ? this.equipment.armor.name
+          : 'No armor equipped'
+      }`
+    );
     infoLogEnd();
   };
-
-  // setupStats = () => {
-  //   this.attackPower = th;
-  //   this.defensePower = playerDefense;
-  //   this.attackPower +=
-  //     this.equipment.sword.attackPower +
-  //     (this.lvl - 1) +
-  //     this.miscStats.strength.count;
-  //   this.defensePower += this.equipment.armor.defensePower + (this.lvl - 1);
-  // };
 
   printInventory = () => {
     infoLog();
@@ -345,8 +351,8 @@ export class Player {
 export const p1 = new Player(
   'Adventurer',
   {
-    sword: noSword,
-    armor: noArmor,
+    sword: null,
+    armor: null,
   },
   [items.testItem],
   500,

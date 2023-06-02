@@ -22,7 +22,7 @@ export const mainMenu = async (player: Player) => {
 
         case 'Profile':
           cls();
-          player.profile();
+          player.printProfile();
           mainMenu(player);
           break;
 

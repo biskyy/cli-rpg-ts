@@ -14,7 +14,7 @@ const infoShopLog = () => {
 };
 exports.infoShopLog = infoShopLog;
 const infoLogEnd = () => {
-    console.log('----------------------------\n');
+    console.log('----------------------------');
 };
 exports.infoLogEnd = infoLogEnd;
 const typewriter = (text, delay) => {

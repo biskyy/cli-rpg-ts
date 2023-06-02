@@ -1,27 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SteelSword = exports.IronSword = exports.CooperSword = exports.WoodenSword = void 0;
-exports.WoodenSword = {
-    type: 'Sword',
-    name: 'Wooden Sword',
-    attack: 3,
-    value: 40,
-};
-exports.CooperSword = {
-    type: 'Sword',
-    name: 'Cooper Sword',
-    attack: 6,
-    value: 200,
-};
-exports.IronSword = {
-    type: 'Sword',
-    name: 'Iron Sword',
-    attack: 10,
-    value: 450,
-};
-exports.SteelSword = {
-    type: 'Sword',
-    name: 'Steel Sword',
-    attack: 15,
-    value: 650,
+exports.swords = exports.Sword = void 0;
+const items_1 = require("./items");
+class Sword extends items_1.Item {
+    attackPower;
+    constructor(type, name, desc, value, attackPower) {
+        super(type, name, desc, value);
+        this.attackPower = attackPower;
+    }
+}
+exports.Sword = Sword;
+exports.swords = {
+    WoodenSword: new Sword(items_1.ItemType.SWORD, 'Wooden Sword', 'Better than nothing', 40, 2),
+    CooperSword: new Sword(items_1.ItemType.SWORD, 'Cooper Sword', 'Your first real upgrade innit?', 200, 6),
+    IronSword: new Sword(items_1.ItemType.SWORD, 'Iron Sword', 'Mid', 450, 10),
+    SteelSword: new Sword(items_1.ItemType.SWORD, 'Steel Sword', 'Not that mid', 850, 15),
+    JujuBow: new Sword(items_1.ItemType.SWORD, 'Juju Bow', 'This bow is reserved for the brave souls who challenged the enderman and emerged victorious.', 2450, 310),
 };
