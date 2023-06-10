@@ -1,39 +1,50 @@
+import {
+  infoLog,
+  infoLogEnd,
+  printBattleInfo,
+  typewriter,
+} from '../helpers/logs';
+import { Character } from '../player/character';
 import { Player } from '../player/player';
 
-export class Monster {
-  name: string;
-  hp: number;
-  attackPower: number;
-  defensePower: number;
+export class Monster extends Character {
   exp: number;
   coins: number;
   constructor(
     name: string,
-    hp: number,
+    maxHp: number,
+    lvl: number,
     attackPower: number,
     defensePower: number,
     exp: number,
     coins: number
   ) {
-    this.name = name;
-    this.hp = hp;
-    this.attackPower = attackPower;
-    this.defensePower = defensePower;
+    super(
+      name,
+      { weapon: null, armor: null },
+      [],
+      maxHp,
+      lvl,
+      attackPower,
+      defensePower
+    );
     this.exp = exp;
     this.coins = coins;
   }
-  attack(player: Player) {
+  async attack(player: Player) {
     let mDamage = Math.ceil(
       this.attackPower * (100 / (100 + player.defensePower))
     ); // damage calc for the monster
 
     player.hp -= mDamage; // subtract hp from the player
 
-    this.hp = Math.max(0, this.hp); // round hp for the player
-
-    console.log(
-      'The ' + this.name.toLowerCase() + ' did ' + mDamage + ' damage to you' // log the action
+    player.hp = Math.max(0, player.hp); // round hp for the player
+    printBattleInfo(player, this);
+    infoLog();
+    await typewriter(
+      `[Lvl ${this.lvl}] ${this.name} did ${mDamage} damage to [Lvl ${player.lvl}] ${player.name}` // log the action
     );
+    infoLogEnd();
   }
 }
 
@@ -41,6 +52,7 @@ export const monsters = {
   bee: new Monster(
     'Bee',
     10,
+    1,
     3,
     1,
     Math.floor(Math.random() * 10) + 1,
@@ -49,8 +61,9 @@ export const monsters = {
 
   wolf: new Monster(
     'Wolf',
-    20,
-    4,
+    2700,
+    2,
+    5,
     5,
     Math.floor(Math.random() * 20) + 10,
     Math.floor(Math.random() * 15) + 5
@@ -59,6 +72,7 @@ export const monsters = {
   deer: new Monster(
     'Deer',
     20,
+    1,
     0,
     15,
     Math.floor(Math.random() * 30) + 10,
