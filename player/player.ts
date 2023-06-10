@@ -1,27 +1,39 @@
-import { infoHuntLog, infoLog, infoLogEnd, typewriter } from '../helpers/logs';
+import {
+  infoHuntLog,
+  infoLog,
+  infoLogEnd,
+  printBattleInfo,
+  typewriter,
+} from '../helpers/logs';
 import { cls, randomFromArr, throwErr, timeSleep } from '../helpers/utils';
 import { Item, ItemType, items } from '../items/items';
 import { Armor, armors } from '../items/armors';
-import { Sword, swords } from '../items/swords';
-// import { noArmor, noSword } from '../items/noItem';
+import { Weapon, weapons } from '../items/weapons';
 import { Area } from '../locations/area';
 import { City } from '../locations/city';
 import { Monster } from '../npcs/monsters';
 import { Perk } from './perks';
+import { Effect } from './effects';
+import { Duel } from './duel';
+import {
+  Ability,
+  ConquerorsHakiAbility,
+  CounterAttackAbility,
+  DefendBoostAbility,
+  FleeAbility,
+  SpeechAbility,
+  TripleShotAbility,
+} from './abilities';
+import { Character, IEquipment } from './character';
 
-export type Inventory = Armor | Sword | Item;
+export type Inventory = Armor | Weapon | Item;
 
 export let inventory: Inventory[] = [items.testItem];
 export const allItems: Item[] = Object.values(items);
-export let allEquipment: (Sword | Armor)[] = Object.values({
+export let allEquipment: (Weapon | Armor)[] = Object.values({
   ...armors,
-  ...swords,
+  ...weapons,
 });
-
-export interface IEquipment {
-  sword: Sword | null;
-  armor: Armor | null;
-}
 
 export interface IMiscStats {
   monstersKilled: { name: string; count: number };
@@ -29,22 +41,28 @@ export interface IMiscStats {
   treesChopped: { name: string; count: number };
 }
 
-export class Player {
-  name: string;
+export const enum CombatOptions {
+  BasicAttack = 'Basic Attack',
+  Defend = 'Defend',
+  CounterAttack = 'Counter Attack',
+  ChargedAttack = 'Charged Attack',
+  ConquerorsHaki = "Conqueror's Haki",
+  Flee = 'Flee',
+  SaySomething = 'Say Something',
+  TripleShot = 'Triple Shot',
+  HeartPiercer = 'Heart Piercer',
+}
+
+export class Player extends Character {
   origin?: string;
-  equipment: IEquipment;
   inventory: Inventory[];
   coins: number;
-  maxHp: number;
-  hp: number;
-  lvl: number;
   maxExp: number;
   exp: number;
-  attackPower: number;
-  defensePower: number;
   location: string;
   miscStats: IMiscStats;
   perks: Perk[];
+  hasFleed: boolean;
   gameOver: boolean;
   constructor(
     name: string,
@@ -52,7 +70,6 @@ export class Player {
     inventory: Inventory[],
     coins: number,
     maxHp: number,
-    hp: number,
     lvl: number,
     maxExp: number,
     exp: number,
@@ -62,21 +79,21 @@ export class Player {
     miscStats: IMiscStats,
     perks: Perk[]
   ) {
-    this.name = name;
-    this.equipment = equipment;
+    super(name, equipment, [], maxHp, lvl, attackPower, defensePower);
+    this.abilities.push(
+      new ConquerorsHakiAbility(CombatOptions.ConquerorsHaki, this),
+      new DefendBoostAbility(CombatOptions.Defend),
+      new FleeAbility('Flee'),
+      new SpeechAbility(CombatOptions.SaySomething)
+    );
     this.inventory = inventory;
     this.coins = coins;
-    this.maxHp = maxHp;
-    this.hp = hp;
-    this.lvl = lvl;
     this.maxExp = maxExp;
     this.exp = exp;
-    this.attackPower = attackPower;
-    this.defensePower = defensePower;
     this.location = location;
     this.miscStats = miscStats;
     this.perks = perks;
-    this.gameOver = false;
+    this.hasFleed = false;
   }
   changeMaxExp = (n: number) => {
     this.maxExp *= n;
@@ -104,68 +121,71 @@ export class Player {
     infoLogEnd();
     return;
   };
-  attack = (monster: Monster): void => {
-    let pDamage = Math.ceil( // damage calc for player
-      ((this.equipment.sword != null ? this.equipment.sword.attackPower : 0) +
-        this.attackPower) *
-        (100 / (100 + monster.defensePower))
-    );
+  // attack = async (monster: Monster) => {
+  //   let pDamage = Math.ceil(
+  //     // damage calc for player
+  //     ((this.equipment.weapon != null ? this.equipment.weapon.damage : 0) +
+  //       this.attackPower) *
+  //       (100 / (100 + monster.defensePower))
+  //   );
 
-    monster.hp -= pDamage; // subtract hp from monster
+  //   monster.hp -= pDamage; // subtract hp from monster
 
-    monster.hp = Math.max(0, monster.hp); // round the hp of the monster
-
-    console.log(
-      'You did ' + pDamage + ' damage to a ' + monster.name.toLowerCase() // log the action
-    );
-  };
-  battle = (monster: Monster) => {
-    infoHuntLog()
-    while (true) {
-
-      this.attack(monster);
-      timeSleep(400)
-
-      if (monster.hp <= 0) { // check monster dead
-        infoLogEnd()
+  //   monster.hp = Math.max(0, monster.hp); // round the hp of the monster
+  //   printBattleInfo(this, monster);
+  //   infoLog();
+  //   await typewriter(
+  //     `You did ${pDamage} damage to [Lvl ${monster.lvl}] ${monster.name}` // log the action
+  //   );
+  //   infoLogEnd();
+  // };
+  duel = async (monster: Monster) => {
+    const duel = new Duel(this, monster);
+    await duel.start();
+    while (duel.player.hp > 0 && duel.monster.hp > 0 && !duel.player.hasFleed) {
+      await duel.proccessRound();
+      if (duel.player.hasFleed) {
         infoLog();
-        console.log(`You found and killed a ${monster.name.toLowerCase()}.`);
-        console.log(`You have ${this.hp} hp remaining!`);
-        console.log(`You've gained ${monster.exp} exp,`);
-        console.log(`and received ${monster.coins} coins.`);
+        await typewriter(
+          `[Lvl ${duel.player.lvl}] ${duel.player.name} decides to flee the battle like a coward!`
+        );
         infoLogEnd();
-
-        this.exp += monster.exp;
-        this.coins += monster.coins;
-        this.miscStats.monstersKilled.count += 1;
-        this.checkHunterPerk();
-        this.checkExp();
-
+        duel.player.hasFleed = false;
         break;
       }
-
-      monster.attack(this)
-      infoLogEnd()
-
-      
-      if (this.checkPlayerDead()) { // check player dead
-        infoLog();
-        console.log(`Uh Oh! Looks like you died to a ${monster.name}!`);
-        infoLogEnd();
-        break;
-      }
-      
-      timeSleep(1500);
     }
+    if (duel.player.hp <= 0) {
+      duel.player.coins /= 2;
+      infoLog();
+      await typewriter(
+        `Seems like you died to [Lvl ${duel.monster.lvl}] ${monster.name}`
+      );
+      await typewriter(`You lost ${duel.player.coins / 2} coins`);
+      infoLogEnd();
+    }
+    if (duel.monster.hp <= 0) {
+      duel.player.exp += duel.monster.exp;
+      duel.player.coins += duel.monster.coins;
+      this.checkExp();
+      infoLog();
+      await typewriter(
+        `Congrats on defeating [Lvl ${duel.monster.lvl}] ${monster.name}`
+      );
+      await typewriter(
+        `You gained ${duel.monster.exp} points of experience and find ${duel.monster.coins} coins while looting the dead body.`
+      );
+      infoLogEnd();
+    }
+    return;
   };
   hunt = (arr: Monster[]) => {
     let monster = randomFromArr(arr);
-    infoLog();
+    infoHuntLog();
     console.log(
       `You go hunting in the woods and find a ${monster.name.toLowerCase()}`
     );
     infoLogEnd();
-    this.battle(monster);
+    this.duel(monster);
   };
   sleep = () => {
     if (this.hp < this.maxHp) {
@@ -194,9 +214,9 @@ export class Player {
     console.log(`Location: ${this.location}\n`);
     console.log(`Equipment:`);
     console.log(
-      `-Sword: ${
-        this.equipment.sword != null
-          ? this.equipment.sword.name
+      `-Weapon: ${
+        this.equipment.weapon != null
+          ? this.equipment.weapon.name
           : 'No sword equipped'
       }`
     );
@@ -274,9 +294,9 @@ export class Player {
     }
   };
 
-  changeSword = (sword: Sword) => {
-    if (this.inventory.includes(sword)) {
-      this.equipment.sword = sword;
+  changeWeapon = (weapon: Weapon) => {
+    if (this.inventory.includes(weapon)) {
+      this.equipment.weapon = weapon;
     } else {
       throwErr(`It's look like you don't have this item in your inventory.`);
     }
@@ -348,15 +368,14 @@ export class Player {
   };
 }
 
-export const p1 = new Player(
+export const p1: Player = new Player(
   'Adventurer',
   {
-    sword: null,
+    weapon: weapons.JujuBow,
     armor: null,
   },
   [items.testItem],
   500,
-  100,
   100,
   1,
   100,

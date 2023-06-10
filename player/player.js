@@ -5,50 +5,41 @@ const logs_1 = require("../helpers/logs");
 const utils_1 = require("../helpers/utils");
 const items_1 = require("../items/items");
 const armors_1 = require("../items/armors");
-const swords_1 = require("../items/swords");
-// import { noArmor, noSword } from '../items/noItem';
+const weapons_1 = require("../items/weapons");
 const area_1 = require("../locations/area");
 const city_1 = require("../locations/city");
 const perks_1 = require("./perks");
+const duel_1 = require("./duel");
+const abilities_1 = require("./abilities");
+const character_1 = require("./character");
 exports.inventory = [items_1.items.testItem];
 exports.allItems = Object.values(items_1.items);
 exports.allEquipment = Object.values({
     ...armors_1.armors,
-    ...swords_1.swords,
+    ...weapons_1.weapons,
 });
-class Player {
-    name;
+class Player extends character_1.Character {
     origin;
-    equipment;
     inventory;
     coins;
-    maxHp;
-    hp;
-    lvl;
     maxExp;
     exp;
-    attackPower;
-    defensePower;
     location;
     miscStats;
     perks;
+    hasFleed;
     gameOver;
-    constructor(name, equipment, inventory, coins, maxHp, hp, lvl, maxExp, exp, attackPower, defensePower, location, miscStats, perks) {
-        this.name = name;
-        this.equipment = equipment;
+    constructor(name, equipment, inventory, coins, maxHp, lvl, maxExp, exp, attackPower, defensePower, location, miscStats, perks) {
+        super(name, equipment, [], maxHp, lvl, attackPower, defensePower);
+        this.abilities.push(new abilities_1.ConquerorsHakiAbility("Conqueror's Haki" /* CombatOptions.ConquerorsHaki */, this), new abilities_1.DefendBoostAbility("Defend" /* CombatOptions.Defend */), new abilities_1.FleeAbility('Flee'), new abilities_1.SpeechAbility("Say Something" /* CombatOptions.SaySomething */));
         this.inventory = inventory;
         this.coins = coins;
-        this.maxHp = maxHp;
-        this.hp = hp;
-        this.lvl = lvl;
         this.maxExp = maxExp;
         this.exp = exp;
-        this.attackPower = attackPower;
-        this.defensePower = defensePower;
         this.location = location;
         this.miscStats = miscStats;
         this.perks = perks;
-        this.gameOver = false;
+        this.hasFleed = false;
     }
     changeMaxExp = (n) => {
         this.maxExp *= n;
@@ -74,53 +65,59 @@ class Player {
         (0, logs_1.infoLogEnd)();
         return;
     };
-    attack = (monster) => {
-        let pDamage = Math.ceil(// damage calc for player
-        ((this.equipment.sword != null ? this.equipment.sword.attackPower : 0) +
-            this.attackPower) *
-            (100 / (100 + monster.defensePower)));
-        monster.hp -= pDamage; // subtract hp from monster
-        monster.hp = Math.max(0, monster.hp); // round the hp of the monster
-        console.log('You did ' + pDamage + ' damage to a ' + monster.name.toLowerCase() // log the action
-        );
-    };
-    battle = (monster) => {
-        (0, logs_1.infoHuntLog)();
-        while (true) {
-            this.attack(monster);
-            (0, utils_1.timeSleep)(400);
-            if (monster.hp <= 0) { // check monster dead
-                (0, logs_1.infoLogEnd)();
+    // attack = async (monster: Monster) => {
+    //   let pDamage = Math.ceil(
+    //     // damage calc for player
+    //     ((this.equipment.weapon != null ? this.equipment.weapon.damage : 0) +
+    //       this.attackPower) *
+    //       (100 / (100 + monster.defensePower))
+    //   );
+    //   monster.hp -= pDamage; // subtract hp from monster
+    //   monster.hp = Math.max(0, monster.hp); // round the hp of the monster
+    //   printBattleInfo(this, monster);
+    //   infoLog();
+    //   await typewriter(
+    //     `You did ${pDamage} damage to [Lvl ${monster.lvl}] ${monster.name}` // log the action
+    //   );
+    //   infoLogEnd();
+    // };
+    duel = async (monster) => {
+        const duel = new duel_1.Duel(this, monster);
+        await duel.start();
+        while (duel.player.hp > 0 && duel.monster.hp > 0 && !duel.player.hasFleed) {
+            await duel.proccessRound();
+            if (duel.player.hasFleed) {
                 (0, logs_1.infoLog)();
-                console.log(`You found and killed a ${monster.name.toLowerCase()}.`);
-                console.log(`You have ${this.hp} hp remaining!`);
-                console.log(`You've gained ${monster.exp} exp,`);
-                console.log(`and received ${monster.coins} coins.`);
+                await (0, logs_1.typewriter)(`[Lvl ${duel.player.lvl}] ${duel.player.name} decides to flee the battle like a coward!`);
                 (0, logs_1.infoLogEnd)();
-                this.exp += monster.exp;
-                this.coins += monster.coins;
-                this.miscStats.monstersKilled.count += 1;
-                this.checkHunterPerk();
-                this.checkExp();
+                duel.player.hasFleed = false;
                 break;
             }
-            monster.attack(this);
-            (0, logs_1.infoLogEnd)();
-            if (this.checkPlayerDead()) { // check player dead
-                (0, logs_1.infoLog)();
-                console.log(`Uh Oh! Looks like you died to a ${monster.name}!`);
-                (0, logs_1.infoLogEnd)();
-                break;
-            }
-            (0, utils_1.timeSleep)(1500);
         }
+        if (duel.player.hp <= 0) {
+            duel.player.coins /= 2;
+            (0, logs_1.infoLog)();
+            await (0, logs_1.typewriter)(`Seems like you died to [Lvl ${duel.monster.lvl}] ${monster.name}`);
+            await (0, logs_1.typewriter)(`You lost ${duel.player.coins / 2} coins`);
+            (0, logs_1.infoLogEnd)();
+        }
+        if (duel.monster.hp <= 0) {
+            duel.player.exp += duel.monster.exp;
+            duel.player.coins += duel.monster.coins;
+            this.checkExp();
+            (0, logs_1.infoLog)();
+            await (0, logs_1.typewriter)(`Congrats on defeating [Lvl ${duel.monster.lvl}] ${monster.name}`);
+            await (0, logs_1.typewriter)(`You gained ${duel.monster.exp} points of experience and find ${duel.monster.coins} coins while looting the dead body.`);
+            (0, logs_1.infoLogEnd)();
+        }
+        return;
     };
     hunt = (arr) => {
         let monster = (0, utils_1.randomFromArr)(arr);
-        (0, logs_1.infoLog)();
+        (0, logs_1.infoHuntLog)();
         console.log(`You go hunting in the woods and find a ${monster.name.toLowerCase()}`);
         (0, logs_1.infoLogEnd)();
-        this.battle(monster);
+        this.duel(monster);
     };
     sleep = () => {
         if (this.hp < this.maxHp) {
@@ -146,8 +143,8 @@ class Player {
         console.log(`Coins: ${this.coins}`);
         console.log(`Location: ${this.location}\n`);
         console.log(`Equipment:`);
-        console.log(`-Sword: ${this.equipment.sword != null
-            ? this.equipment.sword.name
+        console.log(`-Weapon: ${this.equipment.weapon != null
+            ? this.equipment.weapon.name
             : 'No sword equipped'}`);
         console.log(`-Armor: ${this.equipment.armor != null
             ? this.equipment.armor.name
@@ -207,9 +204,9 @@ class Player {
                 break;
         }
     };
-    changeSword = (sword) => {
-        if (this.inventory.includes(sword)) {
-            this.equipment.sword = sword;
+    changeWeapon = (weapon) => {
+        if (this.inventory.includes(weapon)) {
+            this.equipment.weapon = weapon;
         }
         else {
             (0, utils_1.throwErr)(`It's look like you don't have this item in your inventory.`);
@@ -278,9 +275,9 @@ class Player {
 }
 exports.Player = Player;
 exports.p1 = new Player('Adventurer', {
-    sword: null,
+    weapon: weapons_1.weapons.JujuBow,
     armor: null,
-}, [items_1.items.testItem], 500, 100, 100, 1, 100, 0, 10, 5, area_1.Area.CITY, {
+}, [items_1.items.testItem], 500, 100, 1, 100, 0, 10, 5, area_1.Area.CITY, {
     monstersKilled: { name: 'Monsters killed', count: 0 },
     strength: { name: 'Strength', count: 0 },
     treesChopped: { name: 'Trees chopped', count: 0 },
