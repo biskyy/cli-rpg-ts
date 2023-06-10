@@ -1,4 +1,4 @@
-import { Sword } from '../items/swords';
+import { Weapon } from '../items/weapons';
 import { Armor } from '../items/armors';
 import { Inventory } from '../player/player';
 import { infoLog, infoLogEnd } from './logs';
@@ -33,7 +33,7 @@ export const randomItemsFromArr = (arr: Inventory[], n: number) => {
   return result;
 };
 
-export const randomEquipmentFromArr = (arr: (Armor | Sword)[], n: number) => {
+export const randomEquipmentFromArr = (arr: (Armor | Weapon)[], n: number) => {
   var result = new Array(n),
     len = arr.length,
     taken = new Array(len);
