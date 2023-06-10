@@ -1,14 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = require("./helpers/utils");
-const mainMenu_1 = require("./menus/mainMenu");
+const monsters_1 = require("./npcs/monsters");
 const player_1 = require("./player/player");
-const input = async (player) => {
-    let _input = await (0, mainMenu_1.mainMenu)(player);
-    return _input;
-};
 const main = async (player) => {
     (0, utils_1.cls)();
-    await input(player);
+    player.duel(monsters_1.monsters.wolf);
 };
 main(player_1.p1);
