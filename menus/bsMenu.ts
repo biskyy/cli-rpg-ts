@@ -1,6 +1,6 @@
 import { allEquipment, Player } from '../player/player';
 import { cls, randomEquipmentFromArr } from '../helpers/utils';
-import { Sword } from '../items/swords';
+import { Weapon } from '../items/weapons';
 import { Armor } from '../items/armors';
 import { infoLog, infoLogEnd, infoShopLog } from '../helpers/logs';
 import { playMenu } from './playMenu';
@@ -33,7 +33,7 @@ export const bsMenu = (player: Player) => {
         case 'Sell':
           if (
             player.inventory.filter((item) => {
-              return ['Armor', 'Sword'].includes(item.type);
+              return ['Armor', 'Weapon'].includes(item.type);
             }).length > 0
           ) {
             cls();
@@ -57,7 +57,7 @@ export const bsMenu = (player: Player) => {
     });
 };
 
-const bsCatalog: (Armor | Sword)[] = randomEquipmentFromArr(allEquipment, 4);
+const bsCatalog: (Armor | Weapon)[] = randomEquipmentFromArr(allEquipment, 4);
 const _choices = bsCatalog.map((x) => x.name);
 _choices.push('Back');
 
@@ -110,7 +110,7 @@ export const bsSellMenu = (player: Player) => {
 
   if (
     player.inventory.filter((item) => {
-      return ['Armor', 'Sword'].includes(item.type);
+      return ['Armor', 'Weapon'].includes(item.type);
     }).length == 0
   ) {
     cls();
@@ -125,7 +125,7 @@ export const bsSellMenu = (player: Player) => {
 
   for (let i = 0; i < player.inventory.length; i++) {
     if (
-      player.inventory[i].type === 'Sword' ||
+      player.inventory[i].type === 'Weapon' ||
       player.inventory[i].type === 'Armor'
     ) {
       _choices.push(player.inventory[i].name);
@@ -158,16 +158,16 @@ export const bsSellMenu = (player: Player) => {
           let confirmation: boolean = await confirmMenu('sell this item');
 
           if (confirmation) {
-            if (player.equipment.sword.name == answers.choice) {
+            if (player.equipment.weapon.name == answers.choice) {
               cls();
               infoLog();
               console.log(
-                'WARNING! The item you trying to sell is your current Sword.'
+                'WARNING! The item you trying to sell is your current Weapon.'
               );
               infoLogEnd();
               let _confirmation = await confirmMenu('you want to continue');
               if (_confirmation) {
-                player.changeSword(null);
+                player.changeWeapon(null);
               } else {
                 cls();
                 infoLog();

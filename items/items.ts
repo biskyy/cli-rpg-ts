@@ -3,7 +3,7 @@ import { infoLog, infoLogEnd } from '../helpers/logs';
 export enum ItemType {
   ITEM = 'Item',
   AXE = 'Axe',
-  SWORD = 'Sword',
+  SWORD = 'Weapon',
   ARMOR = 'Armor',
   NOSWORD = 'no sword',
   NOARMOR = 'no armor',

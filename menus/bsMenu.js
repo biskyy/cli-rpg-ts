@@ -33,7 +33,7 @@ const bsMenu = (player) => {
                 break;
             case 'Sell':
                 if (player.inventory.filter((item) => {
-                    return ['Armor', 'Sword'].includes(item.type);
+                    return ['Armor', 'Weapon'].includes(item.type);
                 }).length > 0) {
                     (0, utils_1.cls)();
                     (0, exports.bsSellMenu)(player);
@@ -106,7 +106,7 @@ exports.bsBuyMenu = bsBuyMenu;
 const bsSellMenu = (player) => {
     let _choices = [];
     if (player.inventory.filter((item) => {
-        return ['Armor', 'Sword'].includes(item.type);
+        return ['Armor', 'Weapon'].includes(item.type);
     }).length == 0) {
         (0, utils_1.cls)();
         (0, logs_1.infoLog)();
@@ -116,7 +116,7 @@ const bsSellMenu = (player) => {
         return;
     }
     for (let i = 0; i < player.inventory.length; i++) {
-        if (player.inventory[i].type === 'Sword' ||
+        if (player.inventory[i].type === 'Weapon' ||
             player.inventory[i].type === 'Armor') {
             _choices.push(player.inventory[i].name);
         }
@@ -144,14 +144,14 @@ const bsSellMenu = (player) => {
             case _choices[i]:
                 let confirmation = await (0, confirmMenu_1.confirmMenu)('sell this item');
                 if (confirmation) {
-                    if (player.equipment.sword.name == answers.choice) {
+                    if (player.equipment.weapon.name == answers.choice) {
                         (0, utils_1.cls)();
                         (0, logs_1.infoLog)();
-                        console.log('WARNING! The item you trying to sell is your current Sword.');
+                        console.log('WARNING! The item you trying to sell is your current Weapon.');
                         (0, logs_1.infoLogEnd)();
                         let _confirmation = await (0, confirmMenu_1.confirmMenu)('you want to continue');
                         if (_confirmation) {
-                            player.changeSword(null);
+                            player.changeWeapon(null);
                         }
                         else {
                             (0, utils_1.cls)();

@@ -6,7 +6,7 @@ var ItemType;
 (function (ItemType) {
     ItemType["ITEM"] = "Item";
     ItemType["AXE"] = "Axe";
-    ItemType["SWORD"] = "Sword";
+    ItemType["SWORD"] = "Weapon";
     ItemType["ARMOR"] = "Armor";
     ItemType["NOSWORD"] = "no sword";
     ItemType["NOARMOR"] = "no armor";
